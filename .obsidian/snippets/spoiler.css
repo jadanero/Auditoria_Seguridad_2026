@@ -1,0 +1,14 @@
+.spoiler {
+    display: inline-block;
+    width: 150px;
+    height: 20px;
+    color: transparent;
+    background-color: var(--text-normal);
+    cursor: pointer;
+    vertical-align: top;
+}
+
+.spoiler:hover {
+    color: var(--text-normal);
+    background-color: transparent;
+}

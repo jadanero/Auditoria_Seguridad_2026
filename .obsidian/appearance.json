@@ -1,5 +1,8 @@
 {
   "theme": "obsidian",
   "baseFontSize": 16,
-  "baseFontSizeAction": false
+  "baseFontSizeAction": false,
+  "enabledCssSnippets": [
+    "spoiler"
+  ]
 }
