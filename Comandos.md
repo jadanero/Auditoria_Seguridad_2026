@@ -12,16 +12,19 @@ ssh 10.6.25.102
 `usuario`: <span class="spoiler">kali</span>
 `contraseña`: <span class="spoiler">kali</span>
 
-
 **Conexion RPD:**
 ```
 rdesktop -g 1920x900 -k es 10.6.25.102
 ```
-	usuario: kali
-	contraseña: kali
+`usuario`: <span class="spoiler">kali</span>
+`contraseña`: <span class="spoiler">kali</span>
 
 Escanear red [[Nmap man]]
 ```
 nmap
 ```
 
+**Reconocimiento activo**
+```
+traceroute <targetIP>
+```
