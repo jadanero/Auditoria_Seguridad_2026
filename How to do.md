@@ -6,4 +6,3 @@ https://obsidian.md/help/
 
 Truquitos
 [[Comandos]]
-
