@@ -1,4 +1,3 @@
-
 # Reconocimiento activo
 ### Networking
 
