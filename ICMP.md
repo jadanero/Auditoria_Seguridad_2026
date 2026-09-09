@@ -1,0 +1,1 @@
+significa Internet Control Message Protocol. Es un protocolo de red que se utiliza principalmente para enviar mensajes de control y diagnóstico entre dispositivos.

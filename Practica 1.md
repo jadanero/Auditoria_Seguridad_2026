@@ -1,6 +1,6 @@
 # Checkpoint - C1
 **ICMP**
-ICMP significa Internet Control Message Protocol. Es un protocolo de red que se utiliza principalmente para enviar mensajes de control y diagnóstico entre dispositivos.
+[[ICMP]] significa Internet Control Message Protocol. Es un protocolo de red que se utiliza principalmente para enviar mensajes de control y diagnóstico entre dispositivos.
 
 **Por qué y a quién contesta el destino 8.8.8.8**
 Nos contesta(ICMP Reply) a nosotros porque le hemos hecho un ICMP Request. Es google.com
