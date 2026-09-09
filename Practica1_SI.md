@@ -107,13 +107,6 @@ ss -tlpn | grep :433
 
 Para instalar `PowerShell` hemos encontrado estas instrucciones en internet: [PowerShell Debian](https://learn.microsoft.com/es-es/powershell/scripting/install/install-debian?view=powershell-7.6)
 ```
-#!/bin/bash
-###################################
-# Prerequisites
-
-# Update the list of packages
-sudo apt-get update
-
 # Install pre-requisite packages.
 sudo apt-get install -y wget
 
@@ -121,7 +114,7 @@ sudo apt-get install -y wget
 source /etc/os-release
 
 # Download the Microsoft repository GPG keys
-wget -q https://packages.microsoft.com/config/debian/$VERSION_ID/packages-microsoft-prod.deb
+wget -q https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb
 
 # Register the Microsoft repository GPG keys
 sudo dpkg -i packages-microsoft-prod.deb
@@ -141,7 +134,43 @@ pwsh
 
 ```
 
-#### Configuración de red
+Hacemos una última comprobación para la configuración de red `ssh`
+```
+sudo systemctl status ssh
+ss -tlpn | grep :22
+```
+Con esto ya tenemos la configuración de la máquina servidor linux.
 
+#### Configuración de la interfaz
+Hemos encendido dos adaptadores de red:
+- Una red `NAT Network`
+- Una red tipo `Host-only`
 
+```
+sudo apt install isc-dhcp-client
+sudo ip link set enp0s8 up
+sudo dhclient enp0s8
+sudo systemctl restart systemd-networkd
+```
+
+Para hacer persistente la ip en la máquina haremos:
+```
+sudo nano /etc/network/interfaces
+```
+
+En este modificaremos:
+```
+...
+# Segunda interfaz de red (Host-Only)
+auto enp0s8
+iface enp0s8 inet dhcp
+...
+```
+
+Para conectarnos a la máquina:
+```
+ssh dummyadmin@<ip_maquina>
+```
+
+---
 ## 3. Instalación de Windows Server
