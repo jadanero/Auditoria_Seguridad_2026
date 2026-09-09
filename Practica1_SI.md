@@ -73,6 +73,10 @@ sudo a2enmod ssl ##para habilitar mod_ssl
 sudo a2ensite default-ssl
 ```
 
+
+
+
+
 Vamos a guardar la clave en `/etc/ssl/private/`:
 ```
 sudo openssl genrsa -out /etc/ssl/private/linuxserver.key 2048
