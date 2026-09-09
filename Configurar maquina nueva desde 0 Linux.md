@@ -15,14 +15,14 @@ nano sources.list
 
 Aquí deberemos de tener un archivo asi:
 ```
-deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
-deb-src http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian trixie contrib main non-free non-free-firmware
+#deb-src http://deb.debian.org/debian trixie contrib main non-free non-free-firmware
 
-deb http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
-deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian-security trixie-security contrib main non-free non-free-firmware
+#deb-src http://deb.debian.org/debian-security trixie-security contrib main non-free non-free-firmware
 
-deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
-deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian trixie-updates contrib main non-free non-free-firmware
+#deb-src http://deb.debian.org/debian trixie-updates contrib main non-free non-free-firmware
 ```
 
 Para permitirle a un usuario utilizar sudo hay que darle permisos:
