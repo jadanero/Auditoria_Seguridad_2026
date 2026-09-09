@@ -1,0 +1,8 @@
+# Archivos temporales de Obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
