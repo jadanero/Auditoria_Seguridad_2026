@@ -192,13 +192,8 @@ ssh dummyadmin@<ip_maquina>
 #### Administración remota
 
 
+#### Instalación
+#blockeante
+[[Problemas encontrados maquina lab SI]]
 
-Al empezar la instalación llegamos a este problema y bloqueamos la continuación:
-```
-si@SI:~/Desktop$ free -h
-               total        used        free      shared  buff/cache   available
-Mem:           1.9Gi       768Mi       633Mi       9.6Mi       746Mi       1.2Gi
-Swap:          2.0Gi          0B       2.0Gi
-
-```
 
