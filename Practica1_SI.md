@@ -43,11 +43,11 @@ get debian-trixie.iso
 >- **Contraseña:** `palangana2026.ABC`.
 
 **El servidor deberá cumplir los siguientes requisitos:**
-- [ ] Deberá disponer de un servidor web **Apache**.
-- [ ] Deberá tener instalado y operativo **PHP**.
-- [ ] Deberá tener instalado y operativo **MariaDB**.
-- [ ] El usuario `dummyadmin` deberá disponer de permisos para utilizar **sudo** y poder ejecutar cualquier comando con privilegios administrativos.
-- [ ] Deberá instalarse **PowerShell** en el sistema.
+- [x] Deberá disponer de un servidor web **Apache**.
+- [x] Deberá tener instalado y operativo **PHP**.
+- [x] Deberá tener instalado y operativo **MariaDB**.
+- [x] El usuario `dummyadmin` deberá disponer de permisos para utilizar **sudo** y poder ejecutar cualquier comando con privilegios administrativos.
+- [x] Deberá instalarse **PowerShell** en el sistema.
 
 [[Configurar maquina nueva desde 0 Linux]]
 
@@ -174,3 +174,19 @@ ssh dummyadmin@<ip_maquina>
 
 ---
 ## 3. Instalación de Windows Server
+
+>Se deberá crear una máquina virtual con **Windows Server** utilizando los siguientes recursos:
+>- **Memoria RAM:** 4 GB.
+>- **Disco duro:** 30 GB.
+>- **Procesadores:** 2 CPUs.
+>- **Edición:** Standard con Experiencia de escritorio.
+>- **Contraseña:** `palangana2026.ABC`.
+
+#### Configuración del sistema
+>Se deberá configurar el sistema con los siguientes parámetros:
+- [ ] Nombre del equipo: windowsserver. 
+- [ ] Usuario: dummyadmin. 
+- [ ] El usuario dummyadmin deberá pertenecer al grupo Administradores. 
+- [ ]  Deberá habilitarse la administración remota.
+
+#### Administración remota
