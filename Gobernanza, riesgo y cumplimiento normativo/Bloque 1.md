@@ -13,3 +13,4 @@
 #### Sistemas de gestión SGSI u SGCN
 Un **sistema** es algo que, ante una entrada, produce siempre la misma salida de forma **consistente y repetible**. **Gestionar** es coordinar actividades para lograr unos objetivos. Por tanto, un **sistema de gestión** es un conjunto ordenado de políticas, procesos y recursos para conseguir metas de forma repetible (definición de ISO).
 
+
