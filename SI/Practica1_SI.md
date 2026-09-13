@@ -4,7 +4,7 @@ Usuario: SI07
 Contraseña: <span class="spoiler">jadanerolabajo2627</span>
 
 ```
-rdesktop -g 1920x1000 -k es 10.6.24.07
+rdesktop -g 1920x1000 -k es 10.6.24.7
 ```
 
 Usuario: si
