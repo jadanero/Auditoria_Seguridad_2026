@@ -10,6 +10,8 @@ rdesktop -g 1920x1000 -k es 10.6.24.7
 Usuario: si
 Contraseña: <span class="spoiler">adaner0labaj0?2627</span>
 
+Usuario: dummyadmin
+Contraseña: palangana2026.ABC
 ## 1. Introducción
 
 >Dentro de la misma red se encuentra disponible, en la dirección `10.6.24.100`, un servidor Samba que contiene tres imágenes ISO. Estas imágenes deberán descargarse, ya que serán necesarias para crear las máquinas virtuales que compondrán la infraestructura.
@@ -180,6 +182,7 @@ ssh dummyadmin@<ip_maquina>
 >- **Disco duro:** 30 GB.
 >- **Procesadores:** 2 CPUs.
 >- **Edición:** Standard con Experiencia de escritorio.
+>- Usuario: dummyadmin
 >- **Contraseña:** `palangana2026.ABC`.
 
 #### Configuración del sistema
@@ -188,12 +191,8 @@ ssh dummyadmin@<ip_maquina>
 - [ ] Usuario: dummyadmin. 
 - [ ] El usuario dummyadmin deberá pertenecer al grupo Administradores. 
 - [ ]  Deberá habilitarse la administración remota.
-
-#### Administración remota
-
-
 #### Instalación
-#blockeante
+#fixed 
 [[Problemas encontrados maquina lab SI]]
 
 

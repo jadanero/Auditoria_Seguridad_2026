@@ -12,7 +12,7 @@ Se puede hacer `ping 10.6.24.07`
 Se puede hacer `rdesktop -g 1920x1000 -k es 10.6.24.07`
 Pero en el momento que pongo el usuario y contraseña de la maquina `10.6.24.07` se me cierra la sesión de los dos ordenadores.
 
-#blockeante 
+#fixed 
 ```
 rdesktop -g 1920x1000 -k es 10.6.24.7
 ```
