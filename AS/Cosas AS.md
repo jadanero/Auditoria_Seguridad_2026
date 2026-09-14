@@ -6,7 +6,7 @@
 ssh 10.6.25.102
 ```
 `usuario`: <span class="spoiler">kali</span>
-`contraseña`: <span class="spoiler">kali</span>
+`contraseña`: <span class="spoiler">muniain</span>
 
 **Conexión RPD:**
 ```
