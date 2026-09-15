@@ -49,4 +49,17 @@ nslookup starbucks.com
 ```
 dnsenum starbucks.com
 ```
+Con esta herramienta se saca información con fuerza bruta de registros DNS.
+
+Hemos utilizado la herramienta `subfinder`:
+```
+subfinder -d starbucks.com > subfinder.txt
+```
+
+luego hemos buscado:
+```
+cat subfinder.txt | grep content-prod.live
+```
+Encontramos que tenemos un match con la web que habíamos encontrado anteriormente
+
 
