@@ -25,5 +25,28 @@ haciendo esta busqueda en google:
 site:starbucks.com/ filetype:php
 ```
 
+Haciendo esta busqueda:
+```
+site:starbucks.com/ "Brian Niccol" filetype:pdf
+```
 
+Hemos encontrado unos pdfs de la corporacion que podríamos explotar cambiando el directorio.
+https://content-prod-live.cert.starbucks.com/binary/v2/asset/143-97402.pdf
+
+## Herramientas OSINT en Kali Linux
+```
+whois starbucks.com
+```
+
+```
+dig starbucks.com
+```
+
+```
+nslookup starbucks.com
+```
+
+```
+dnsenum starbucks.com
+```
 
