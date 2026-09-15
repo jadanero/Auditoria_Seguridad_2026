@@ -63,3 +63,7 @@ cat subfinder.txt | grep content-prod.live
 Encontramos que tenemos un match con la web que habíamos encontrado anteriormente
 
 
+## Siguiendo con...
+
+https://content-prod-live.cert.starbucks.com/binary/v2/asset/143-97402.pdf
+[[Script de prueba de directorios]]
