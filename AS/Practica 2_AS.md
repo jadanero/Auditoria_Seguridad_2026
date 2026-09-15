@@ -112,3 +112,25 @@ Como no sabemos mucho con lo que hemos hecho vamos a probar algo más genérico:
 ```
 nc 23.211.15.153 80
 ```
+
+
+```
+HTTP/1.0 408 Request Time-out
+Server: AkamaiGHost
+Mime-Version: 1.0
+Date: Tue, 15 Sep 2026 18:02:21 GMT
+Content-Type: text/html
+Content-Length: 314
+Expires: Tue, 15 Sep 2026 18:02:21 GMT
+
+<HTML><HEAD>
+<TITLE>Request Timeout</TITLE>
+</HEAD><BODY>
+<H1>Request Timeout</H1>
+The server timed out while waiting for the browser's request.<P>
+
+Reference&#32;&#35;2&#46;99d73b17&#46;1789495341&#46;0
+<P>https&#58;&#47;&#47;errors&#46;edgesuite&#46;net&#47;2&#46;99d73b17&#46;1789495341&#46;0</P>
+</BODY></HTML>
+```
+
