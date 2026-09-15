@@ -62,18 +62,19 @@ cat subfinder.txt | grep content-prod.live
 ```
 Encontramos que tenemos un match con la web que habíamos encontrado anteriormente
 
-
 ## Siguiendo con...
 
 https://content-prod-live.cert.starbucks.com/binary/v2/asset/143-97402.pdf
 Las dos pruebas se han realizado en paralelo:
 ### Prueba 1
 [[Script de prueba de directorios]]
+Si no da codigo de error descarga el archivo
+
 Se han encontrado diferentes matches en los diferentes directorios recorridos. No en formato pdf pero si en json aunque fueran archivos `.pdf`
 
 Se ven matches que descargan un archivo pdf que no es legible y si probamos su nombre en la url vemos un archivo json en plain text.
 
-
+Hemos descargado muchas imagenes y pdfs
 ### Prueba 2
 Para la prueba para descubrir que servidor es y qué sistemas emplea haremos:
 ```
