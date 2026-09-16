@@ -1,5 +1,3 @@
-
-
 Usuario: SI07
 Contraseña: <span class="spoiler">jadanerolabajo2627</span>
 
@@ -270,9 +268,15 @@ get-service sshd
 ```
 
 ## 4. Instalación de Windows 11
-En la instalación escogemos la opción de uso profesional o educativo como indica en la práctica
 
-“Otras opciones” y darle a “Unirse a un dominio”
+>Se deberá crear una máquina virtual con Windows Server utilizando los siguientes recursos: 
+>• Memoria RAM: 4 GB. 
+>• Disco duro: 30 GB. 
+>• Procesadores: 2 CPUs. 
+>• Edición: Standard con Experiencia de escritorio. 
+>• Contraseña: palangana2026.ABC 
+>
+>Aunque la instalación inicial se realizará utilizando la interfaz gráfica, las siguientes configuraciones deberán realizar
 
 Configurar el usuario y la contraseña 
 
