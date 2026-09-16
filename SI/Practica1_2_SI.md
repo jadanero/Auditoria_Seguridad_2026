@@ -26,6 +26,16 @@ Para ambas máquinas cambiaremos una pequeña linea de configuración de los hos
 ```
 sudo hostinamectl set-hostname linuxbackup
 sudo nano /etc/hosts    # Cambiamos el nombre dentro del archivo
+```
+
+`/etc/hosts`
+```
+...
+linuxbackup.blue.local linuxbackup
+...
+```
+
+```
 hostnamectl             # Comprobamos el cambio del nombre en el sistema
 ```
 #### Creación de usuarios
