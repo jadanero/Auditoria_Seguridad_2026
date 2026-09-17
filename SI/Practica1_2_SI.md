@@ -199,14 +199,48 @@ Hacemos una busqueda y vemos el archivo compartido con `ls`
 **Funciona!**
 
 ## Configuración SSH
-Explicaremos como se ha hecho la configuración para uno de los usuarios y será igual para los demás. Explicaremos la configuración de `alice`
+Explicaremos como se ha hecho la configuración para una de las máquinas.
 
-Dentro de la máquina  `LinuxClient`:
+Dentro de la máquina `LinuxClient` tendremos que configurar un par de claves para conectarnos con los usuarios `dummyadmin` de las otras dos máquinas:
 ```
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
-ssh-copy-id alice@192.168.56.103
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_backup
+ssh-copy-id -i ~/.ssh/rsa_backup.pub dummyadmin@192.168.56.103
+
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_server
+ssh-copy-id -i ~/.ssh/rsa_server.pub dummyadmin@192.168.56.102
 ```
-De esta forma comprobamos que nos permite acceder por `ssh` sin necesidad de poner contraseña desde `LinuxClient`
+De esta forma comprobamos que nos permite acceder por `ssh` sin necesidad de poner contraseña desde `LinuxClient`. Para facilitarnos aun mas la vida crearemos el archivo de configuración ssh.
+`/.ssh/config`
+```
+Host backup
+    HostName 192.168.56.103
+    User dummyadmin
+    IdentityFile ~/.ssh/rsa_backup
+
+Host server
+    HostName 192.168.56.102
+    User dummyadmin
+    IdentityFile ~/.ssh/rsa_server
+```
+Y finalmente le daremos permisos para que funcione bien.
+```
+chmod 600 ~/.ssh/config
+```
+
+Ahora simplemente con poner en la terminal:
+```
+ssh server
+```
+o
+```
+ssh backup
+```
+Nos conectaremos respectivamente a las diferentes maquinas
+
+
+Haremos la misma configuración desde los otros dos ordenadores `LinuxBackup` y `LinuxServer`.
+
+
 
 Esto que acabamos de hacer lo hemos repetido 2 veces mas para los usuarios `bob` y `trudy`. Esto lo hace ineficiente si tuviéramos 500 usuarios, por ejemplo.
 
