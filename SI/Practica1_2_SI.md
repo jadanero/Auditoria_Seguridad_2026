@@ -210,6 +210,10 @@ ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_server
 ssh-copy-id -i ~/.ssh/rsa_server.pub dummyadmin@192.168.56.102
 ```
 De esta forma comprobamos que nos permite acceder por `ssh` sin necesidad de poner contraseña desde `LinuxClient`. Para facilitarnos aun mas la vida crearemos el archivo de configuración ssh.
+```
+sudo nano .ssh/config
+```
+
 `/.ssh/config`
 ```
 Host backup
@@ -224,7 +228,8 @@ Host server
 ```
 Y finalmente le daremos permisos para que funcione bien.
 ```
-chmod 600 ~/.ssh/config
+sudo chown dummyadmin:dummyadmin ~/.ssh/config
+sudo chmod 600 ~/.ssh/config
 ```
 
 Ahora simplemente con poner en la terminal:
@@ -236,13 +241,10 @@ o
 ssh backup
 ```
 Nos conectaremos respectivamente a las diferentes maquinas
-
-
 Haremos la misma configuración desde los otros dos ordenadores `LinuxBackup` y `LinuxServer`.
 
 
-
-Esto que acabamos de hacer lo hemos repetido 2 veces mas para los usuarios `bob` y `trudy`. Esto lo hace ineficiente si tuviéramos 500 usuarios, por ejemplo.
+**NO HE HECHO LA CA**
 
 Además de la autenticación mediante claves SSH convencionales, se configurará el
 acceso mediante claves SSH firmadas por una Autoridad de Certificación
@@ -258,8 +260,6 @@ Para las máquinas `LinuxBackup` y `LinuxClient`:
 sudo apt update
 sudo apt install encfs
 ```
-
-
 
 
 
