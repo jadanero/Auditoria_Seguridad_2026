@@ -1,15 +1,15 @@
 ## Objetivos
 Se configurarán dos nuevas máquinas virtuales Linux: 
-- [ ] LinuxBackup: equipo destinado a actuar como servidor de backups y recepción de logs. 
-- [ ] LinuxClient: equipo cliente desde el que se realizarán las diferentes pruebas. 
+- [x] LinuxBackup: equipo destinado a actuar como servidor de backups y recepción de logs. 
+- [x] LinuxClient: equipo cliente desde el que se realizarán las diferentes pruebas. 
 
 Además, se utilizará la máquina LinuxServer configurada en la primera parte de la práctica. Durante la práctica se trabajará con los siguientes servicios y tecnologías: 
-- [ ] Configuración de red mediante NAT y Host-Only. 
-- [ ]  Gestión de usuarios. 
-- [ ] rsyslog para la centralización de logs. 
-- [ ] NFS para compartir directorios en red. 
-- [ ] Samba para compartir archivos. 
-- [ ] SSH mediante autenticación con claves y claves firmadas por una CA. 
+- [x] Configuración de red mediante NAT y Host-Only. 
+- [x]  Gestión de usuarios. 
+- [x] rsyslog para la centralización de logs. 
+- [x] NFS para compartir directorios en red. 
+- [x] Samba para compartir archivos. 
+- [x] SSH mediante autenticación con claves y claves firmadas por una CA. 
 - [ ] EncFS para crear directorios cifrados. 
 - [ ] rdiff-backup para realizar copias de seguridad. 
 - [ ] ClamAV para analizar archivos y generar registros
@@ -259,6 +259,26 @@ Para las máquinas `LinuxBackup` y `LinuxClient`:
 ```
 sudo apt update
 sudo apt install encfs
+```
+Y comprobamos que está instalado
+```
+encfs --version
+```
+
+En la maquina `LinuxClient` crearemos el usuario `alice`
+
+Escribiremos esto:
+```
+dummyadmin@linuxclient:~$ df -h | grep nfs
+192.168.56.102:/srv/nfs/share  3.4G  1.9G  1.3G  59% /mnt/nfsshare
+```
+Para saber donde tenemos montado el directorio de nfs
+
+Ahora que lo sabemos podremos fabricar los directorios donde irán los datos encriptados y los datos en plano:
+```
+sudo mkdir -p /mnt/nfsshare/Alice
+sudo mkdir -p /home/alice/Alice
+sudo chown alice:alice /home/alice/Alice
 ```
 
 
