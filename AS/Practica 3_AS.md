@@ -104,3 +104,8 @@ sudo nmap -A <IP_TARGET>
 ## C8
 
 
+
+
+porque nos sale como `ls -l /usr/bin/nmap`
+sacar el kernel de la maquina atacada ubuntu13.5
+script
