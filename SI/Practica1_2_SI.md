@@ -281,12 +281,13 @@ sudo mkdir -p /home/alice/Alice
 sudo chown alice:alice /home/alice/Alice
 ```
 
-NO  ME DEJA HACER:
+Para conseguir que se monte el directorio encriptado:
 ```
+
 su - alice
 encfs /mnt/nfsshare/Alice /home/alice/Alice
 ```
-ESTO SE SUPONE QUE MONTA LA MIERDA ESTA DEL ENCFS
+
 
 
 
