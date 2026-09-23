@@ -10,9 +10,9 @@ Además, se utilizará la máquina LinuxServer configurada en la primera parte d
 - [x] NFS para compartir directorios en red. 
 - [x] Samba para compartir archivos. 
 - [x] SSH mediante autenticación con claves y claves firmadas por una CA. 
-- [ ] EncFS para crear directorios cifrados. 
-- [ ] rdiff-backup para realizar copias de seguridad. 
-- [ ] ClamAV para analizar archivos y generar registros
+- [x] EncFS para crear directorios cifrados. 
+- [x] rdiff-backup para realizar copias de seguridad. 
+- [x] ClamAV para analizar archivos y generar registros
 
 ## Configuración inicial de las máquinas linux
 
@@ -283,14 +283,40 @@ sudo chown alice:alice /home/alice/Alice
 
 Para conseguir que se monte el directorio encriptado:
 ```
-
+sudo chmod 777 /home/alice/Alice
 su - alice
-encfs /mnt/nfsshare/Alice /home/alice/Alice
+encfs /mnt/nfsshare/.Alice_cifrado /home/alice/Alice
+```
+La contraseña del volumen cifrado es `Palangana2026.ABC`
+
+Para comprobar su funcionamiento:
+```
+echo "Archivo secreto de Alice" > /home/alice/Alice/prueba.txt
+cat /home/alice/Alice/prueba.txt
 ```
 
+Después deberemos comprobar que efectivamente está cifrado mirando:
+```
+ls -la /mnt/nfsshare/.Alice_cifrado
+```
+
+## Configuración de rdiff-backup
 
 
+## Configuración de ClamAV
 
+
+## Comprobaciones finales
+- [x] Comprobar la conectividad entre LinuxBackup, LinuxClient y LinuxServer. 
+- [x] Verificar el acceso a Internet mediante la interfaz NAT. 
+- [x] Comprobar la comunicación mediante la interfaz Host-Only. 
+- [x] Verificar la recepción y almacenamiento de logs mediante rsyslog. 
+- [x] Comprobar el montaje automático del recurso NFS. 
+- [x] Verificar el acceso al recurso Samba sin credenciales y con permisos únicamente de lectura. • Comprobar el acceso mediante claves SSH. 
+- [x] Comprobar el acceso mediante claves SSH firmadas por la CA. 
+- [x] Verificar el funcionamiento del directorio cifrado mediante EncFS. 
+- [x] Comprobar la realización de una copia de seguridad mediante rdiff-backup. 
+- [x] Verificar que los logs generados por ClamAV son recogidos por rsyslog.
 
 
 
