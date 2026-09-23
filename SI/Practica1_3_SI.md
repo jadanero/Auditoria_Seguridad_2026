@@ -150,10 +150,7 @@ iface enp0s3 inet static
 #### `Windows`:
 ```
 New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress "192.168.57.11" -PrefixLength 24 -DefaultGateway "192.168.56.254"
-<<<<<<< HEAD
 Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 8.8.8.8,1.1.1.1
-=======
->>>>>>> origin/main
 ```
 
 Para poner la red en privado:
