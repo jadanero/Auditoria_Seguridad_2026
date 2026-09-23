@@ -161,7 +161,10 @@ Set-NetConnectionProfile -InterfaceAlias "Ethernet" -NetworkCategory Private
 ## Configuración SSH para todas las VMs
 Tenemos que hacer la instalacion de `Openssh` para las maquinas `windows`. Es lo que explicaremos ahora y después ya nos centraremos en los siguientes aspectos de la práctica.
 #### Windows ssh config
-
+Para instalar OpenSSH:
+```
+add-windowscapability -online -name OpenSSH.server
+``` 
 
 #### Config genérica SSH
 [[Configuración SI SSH]]
