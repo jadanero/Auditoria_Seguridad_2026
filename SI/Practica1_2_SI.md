@@ -243,16 +243,42 @@ ssh backup
 Nos conectaremos respectivamente a las diferentes maquinas
 Haremos la misma configuración desde los otros dos ordenadores `LinuxBackup` y `LinuxServer`.
 
-
-**NO HE HECHO LA CA**
-
-Además de la autenticación mediante claves SSH convencionales, se configurará el
-acceso mediante claves SSH firmadas por una Autoridad de Certificación
-(CA) común
-
+en `/etc/ssh/sshd_config` por seguridad en cada una de las maquinas pondremos esta configuración:
 ```
-ssh-keygen -f 
+PasswordAuthentication no
+PubkeyAuthentication yes
+PermitRootLogin prohibit-password
+PermitRootLogin no
 ```
+
+#### Configuración ssh CA
+Generamos la autoridad de certificación en `LinuxClient`
+```
+mkdir -p ~/.ssh/ca
+ssh-keygen -f ~/.ssh/ca/ca_user_key -N ""
+```
+
+Configuramos la confianza en los otros dos servidores
+```
+cat ~/.ssh/ca/ca_user_key.pub
+```
+Guardar la clave pública de la CA en los otros Linux tanto `LinuxServer` como el `LinuxBackup`
+Creamos un nuevo fichero de claves y añadimos la que habíamos copias en `linuxclient`
+```
+sudo nano /etc/ssh/trusted-user-ca-keys.pem0
+```
+
+Editamos `/etc/ssh/sshd_config` y añadimos la siguiente línea:
+```
+TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem
+```
+
+Reiniciamos el servicio:
+```
+sudo systemctl restart sshd
+```
+
+AL HACER LAS PRUEBAS LEYENDO LOS LOGS SE SIGUEN CONECTANDO POR CLAVES SSH Y NO POR CLAVES FIRMADAS
 
 ## Configuración de EncFS
 Para las máquinas `LinuxBackup` y `LinuxClient`:
@@ -301,13 +327,76 @@ ls -la /mnt/nfsshare/.Alice_cifrado
 ```
 
 ## Configuración de rdiff-backup
+Instalar en `LinuxClient`:
+```
+sudo apt update && sudo apt install rdiff-backup -y
+```
+Crear archivo de prueba en alice:
+```
+su - alice # Crear un par de ficheros de prueba en la carpeta de Alice echo "Documento de datos 1 para backup" > /home/alice/Alice/documento1.txt
+```
+Ejecutar la copia de seguridad:
+```
+rdiff-backup /home/alice/Alice /mnt/nfsshare/.Alice_cifrado
+```
 
+Comprobaciones:
+```
+ls -la /mnt/nfsshare/.Alice_cifrado
+cat /home/alice/Alice/documento1.txt
+```
 
 ## Configuración de ClamAV
+Instalación en `LinuxServer`:
+```
+sudo apt install clamav clamav-daemon
+```
 
+Para actualizar las base de datos de virus de ClamAV es necesario detener temporalmente el servicio freshclam para que no bloque el archivo de firmas:
+```
+sudo systemctl stop clamav-freshclam
+sudo freshclam
+sudo systemctl start clamav-freshclam
+```
+
+Creamos un script de escaneo automático para que todos los días por ejemplo a las 2 envie el reporte a `LinuxBackup`:
+`/usr/local/bin/escaneo_clamav.sh`:
+```
+ #!/bin/bash
+
+# 1. Enviar un evento de inicio a rsyslog con la etiqueta "clamav"
+logger -t clamav "=== Iniciando Análisis con ClamAV ==="
+
+# 2. Ejecutar el escaneo y enviar la salida a rsyslog (tag: clamav, prioridad: notice)
+clamscan -r -i /home /var/www | logger -t clamav -p local0.notice
+
+# 3. Enviar evento de finalización
+logger -t clamav "=== Análisis con ClamAV finalizado ==="
+```
+**Explicación:** Al usar `| logger -t clamav`, la salida de `ClamAV` entra directamente al flujo de eventos de `rsyslog` con la etiqueta `clamav`. Como `rsyslog` ya lo tienes configurado para redirigir todo el tráfico local a `LinuxBackup` (Punto 4), los mensajes viajarán automáticamente por la red.
+
+Le damos permisos y creamos la automatización con `cron`. Abrimos el `contrab` de `root` y le metemos la línea para que escane todos los días a las 02:00AM
+```
+sudo chmod +x /usr/local/bin/escaneo_clamav.sh
+sudo crontab -e
+```
+
+```
+0 2 * * * /usr/local/bin/escaneo_clamav.sh (Dentro del contrab)
+```
+
+Probamos el funcionamiento ejecutamos el script manualmente para comprobar que funciona el script y crea el archivo:
+```
+sudo /usr/local/bin/escaneo_clamav.sh
+```
+
+Comprobamos en `LinuxBackup`  
+```
+cat /var/log/remote/192.168.56.102/linuxserver/clamav.log
+```
 
 ## Comprobaciones finales
-- [x] Comprobar la conectividad entre LinuxBackup, LinuxClient y LinuxServer. 
+- [x] Comprobar la conectividad entre `LinuxBackup`, `LinuxClient` y `LinuxServer`. 
 - [x] Verificar el acceso a Internet mediante la interfaz NAT. 
 - [x] Comprobar la comunicación mediante la interfaz Host-Only. 
 - [x] Verificar la recepción y almacenamiento de logs mediante rsyslog. 
