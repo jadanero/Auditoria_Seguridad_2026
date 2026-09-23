@@ -148,7 +148,16 @@ iface enp0s3 inet static
 ```
 
 #### `Windows`:
+```
+New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress "192.168.57.11" -PrefixLength 24 -DefaultGateway "192.168.56.254"
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 8.8.8.8,1.1.1.1
+```
 
+Para poner la red en privado:
+```
+Get-NetConnectionProfile
+Set-NetConnectionProfile -InterfaceAlias "Ethernet" -NetworkCategory Private
+```
 
 ## Configuración SSH para todas las VMs
 Tenemos que hacer la instalacion de `Openssh` para las maquinas `windows`. Es lo que explicaremos ahora y después ya nos centraremos en los siguientes aspectos de la práctica.
