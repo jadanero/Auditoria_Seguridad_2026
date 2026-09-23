@@ -64,7 +64,6 @@ Para comprobar que esté activo en cada uno:
 ```
 sudo systemctl status rsyslog
 ```
-
 #### LinuxBackup
 En la máquina que va a funcionar como server, que va a ser la `LinuxBackup` deberemos cambiar el archivo de configuración para convertirlo en servidor y que pueda recibir los logs por TCP. Tendremos un fichero con el nombre `01-receptor.conf`.
 

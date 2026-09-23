@@ -8,6 +8,7 @@
 | `WindowsClient`              | 192.168.56.102   |
 | `LinuxRouter2 (Host-Only 0)` | 192.168.56.253   |
 | `LinuxRouter2 (Host-Only 1)` | 192.168.57.254   |
+| `LinuxRouter1 (Host-Only 1)` | 192.168.56.254   |
 
 De esta forma nos queda una red de esta forma:
 ```mermaid
@@ -77,8 +78,8 @@ Configurar la tarjeta de red
 ```
 auto enp0s8
 iface enp0s8 inet static 
-address 192.168.56.254 // Esto justo no lo indica la practica asi que pondremos esta 
-netmask 255.255.255.0
+	address 192.168.56.254
+	netmask 255.255.255.0
 ```
 Habilitar `port-forwarding` para el reenvio de paquetes
 ```
@@ -100,7 +101,7 @@ sudo apt update && sudo apt install iptables iptables-persistent -y
 ```
 
 ```
-iptables -t nat -A <POSTROUTING> -o <INTERFACE> -j <MASQUERADE>
+iptables -t nat -A <POSTROUTING> -o enp0s3 -j <MASQUERADE>
 ```
 
 Por ultimo tenemos que guardar la regla para que quede persistente si rebooteamos
@@ -117,6 +118,7 @@ auto enp0s3
 iface enp0s3 inet static
         address 192.168.56.253
         netmask 255.255.255.0
+        gateway 192.168.56.254
 auto enp0s8
 iface enp0s8 inet static
         address 192.168.57.254
