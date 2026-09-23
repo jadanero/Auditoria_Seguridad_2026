@@ -148,3 +148,14 @@ iface enp0s3 inet static
 ```
 
 #### `Windows`:
+
+
+## Configuración SSH para todas las VMs
+Tenemos que hacer la instalacion de `Openssh` para las maquinas `windows`. Es lo que explicaremos ahora y después ya nos centraremos en los siguientes aspectos de la práctica.
+#### Windows ssh config
+
+
+#### Config genérica SSH
+[[Configuración SI SSH]]
+En este archivo explicamos que hacer desde la maquina SI
+
