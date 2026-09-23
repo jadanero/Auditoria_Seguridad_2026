@@ -159,3 +159,38 @@ Tenemos que hacer la instalacion de `Openssh` para las maquinas `windows`. Es lo
 [[Configuración SI SSH]]
 En este archivo explicamos que hacer desde la maquina SI
 
+
+## Reconfiguraciones de practicas anteriores
+Como en practicas anteriores hemos hecho unas configuraciones ahora solo tenemos que cambiar ligeramente algunas cosas que ya hemos hecho anteriormente.
+#### `RSYSLOG`
+En todos los `linux` menos en `LinuxServer` tenemos que modificar este fichero y cambiar la `ip`: `/etc/rsyslog.d/01-remoto.conf` añadimos la `ip` de `LinuxBackup` nueva
+
+Para que funcione el servicio y coja la configuración que queremos:
+```
+sudo systemctl restart rsyslog
+```
+
+Para comprobar que funciona otra vez:
+```
+logger "Prueba rsyslog hacia LinuxBackup tras resegmentacion"
+```
+
+#### NFS
+Modificar en `LinuxServer`:
+`/etc/exports`:
+```
+/srv/nfs/share 192.168.56.0/24(rw,sync,no_subtree_check) 192.168.57.0/24(rw,sync,no_subtree_check)
+```
+
+Hacemos la prueba desde `LinuxClient` por ejemplo 
+```
+sudo mkdir -p /mnt/nfs_share
+sudo mount -t nfs 192.168.56.10:/srv/nfs/share /mnt/nfs_share
+df -h /mnt/nfs_share
+```
+hacemos una prueba de escritura:
+```
+touch /mnt/nfs_share/prueba_escritura.txt
+```
+y comprobar que se crea en `LinuxBackup`
+

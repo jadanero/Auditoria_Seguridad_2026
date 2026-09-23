@@ -1,27 +1,16 @@
 ```
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_linuxbackup
-ssh-copy-id -i ~/.ssh/rsa_linuxbackup.pub dummyadmin@192.168.57.10
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_linux
+ssh-copy-id -i ~/.ssh/rsa_linux.pub dummyadmin@192.168.57.10
+ssh-copy-id -i ~/.ssh/rsa_linux.pub dummyadmin@192.168.56.10
+ssh-copy-id -i ~/.ssh/rsa_linux.pub dummyadmin@192.168.56.101
 
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_linuxserver
-ssh-copy-id -i ~/.ssh/rsa_linuxserver.pub dummyadmin@192.168.56.10
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_windows
+ssh-copy-id -i ~/.ssh/rsa_windows.pub dummyadmin@192.168.57.11
+ssh-copy-id -i ~/.ssh/rsa_windows.pub dummyadmin@192.168.56.102
 
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_linuxclient
-ssh-copy-id -i ~/.ssh/rsa_linuxserver.pub dummyadmin@192.168.56.101
-
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_windowsserver
-ssh-copy-id -i ~/.ssh/rsa_windowsserver.pub dummyadmin@192.168.57.11
-
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_windowsclient
-ssh-copy-id -i ~/.ssh/rsa_windowsclient.pub dummyadmin@192.168.56.102
-
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_linuxclient
-ssh-copy-id -i ~/.ssh/rsa_linuxserver.pub dummyadmin@192.168.56.101
-
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_router1
-ssh-copy-id -i ~/.ssh/rsa_router1.pub dummyadmin@192.168.56.254
-
-ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_router2
-ssh-copy-id -i ~/.ssh/rsa_router2.pub dummyadmin@192.168.56.253
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_router
+ssh-copy-id -i ~/.ssh/rsa_router.pub dummyadmin@192.168.56.254
+ssh-copy-id -i ~/.ssh/rsa_router.pub dummyadmin@192.168.56.253
 ```
 
 `/.ssh/config`
@@ -29,37 +18,47 @@ ssh-copy-id -i ~/.ssh/rsa_router2.pub dummyadmin@192.168.56.253
 Host linuxbackup
     HostName 192.168.57.10
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_linuxbackup
+    IdentityFile ~/.ssh/rsa_linux
 
 Host linuxserver
     HostName 192.168.56.10
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_linuxserver
+    IdentityFile ~/.ssh/rsa_linux
 
 Host linuxclient
     HostName 192.168.56.101
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_linuxclient
+    IdentityFile ~/.ssh/rsa_linux
     
 Host windowsserver
     HostName 192.168.57.11
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_windowsserver
+    IdentityFile ~/.ssh/rsa_windows
+    
+Host windowsserver-admin
+    HostName 192.168.57.11
+    User administrator
+    IdentityFile ~/.ssh/rsa_windows
     
 Host windowsclient
     HostName 192.168.56.102
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_windowsclient
+    IdentityFile ~/.ssh/rsa_windows
+    
+Host windowsclient-admin
+    HostName 192.168.56.102
+    User administrator
+    IdentityFile ~/.ssh/rsa_windows
     
 Host router1
     HostName 192.168.56.254
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_router1
+    IdentityFile ~/.ssh/rsa_router
     
 Host router2
     HostName 192.168.56.253
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_router2  
+    IdentityFile ~/.ssh/rsa_router
 
 ```
 Y finalmente le daremos permisos para que funcione bien.
