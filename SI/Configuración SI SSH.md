@@ -6,7 +6,9 @@ ssh-copy-id -i ~/.ssh/rsa_linux.pub dummyadmin@192.168.56.101
 
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_windows
 ssh-copy-id -i ~/.ssh/rsa_windows.pub dummyadmin@192.168.57.11
+ssh-copy-id -i ~/.ssh/rsa_windows.pub Administrador@192.168.57.11
 ssh-copy-id -i ~/.ssh/rsa_windows.pub dummyadmin@192.168.56.102
+ssh-copy-id -i ~/.ssh/rsa_windows.pub Administrador@192.168.56.102
 
 ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/rsa_router
 ssh-copy-id -i ~/.ssh/rsa_router.pub dummyadmin@192.168.56.254
@@ -37,7 +39,7 @@ Host windowsserver
     
 Host windowsserver-admin
     HostName 192.168.57.11
-    User administrator
+    User administrador
     IdentityFile ~/.ssh/rsa_windows
     
 Host windowsclient
@@ -47,7 +49,7 @@ Host windowsclient
     
 Host windowsclient-admin
     HostName 192.168.56.102
-    User administrator
+    User administrador
     IdentityFile ~/.ssh/rsa_windows
     
 Host router1
@@ -59,7 +61,6 @@ Host router2
     HostName 192.168.56.253
     User dummyadmin
     IdentityFile ~/.ssh/rsa_router
-
 ```
 Y finalmente le daremos permisos para que funcione bien.
 ```
