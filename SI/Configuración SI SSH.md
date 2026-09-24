@@ -15,6 +15,10 @@ ssh-copy-id -i ~/.ssh/rsa_router.pub dummyadmin@192.168.56.254
 ssh-copy-id -i ~/.ssh/rsa_router.pub dummyadmin@192.168.56.253
 ```
 
+```
+palangana2026.ABC
+```
+
 `/.ssh/config`
 ```
 Host linuxbackup
