@@ -8,7 +8,7 @@
 | `WindowsClient`              | 192.168.56.102   |
 | `LinuxRouter2 (Host-Only 0)` | 192.168.56.253   |
 | `LinuxRouter2 (Host-Only 1)` | 192.168.57.254   |
-| `LinuxRouter1 (Host-Only 1)` | 192.168.56.254   |
+| `LinuxRouter1 (Host-Only 0)` | 192.168.56.254   |
 
 De esta forma nos queda una red de esta forma:
 ```mermaid
@@ -24,8 +24,8 @@ flowchart RL
     %% =========================
     %% ROUTER 1
     %% =========================
-    R1["LinuxRouter1"]
-
+    R1["LinuxRouter1"<br/>192.168.56.254]
+	
     %% =========================
     %% HOST-ONLY 0
     %% =========================
