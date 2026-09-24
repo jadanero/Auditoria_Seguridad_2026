@@ -12,7 +12,7 @@
 
 De esta forma nos queda una red de esta forma:
 ```mermaid
-flowchart LR
+flowchart RL
 
     %% =========================
     %% INTERNET / NAT
