@@ -9,9 +9,9 @@ sudo systemctl enable docker --now
 Luego arrancamos el docker con `./start.sh`
 
 Cuando la arrancamos deberemos de cumplir lo que se nos pide en el startup:
-- [ ] Queremos descubrir la `ip_target`
-- [ ] Escanear los puertos TCP/UDP abiertos y enumerar los servicios corriendo
-- [ ] Modificar las reglas del firewall para ver como influye en el escaneo
+- [x] Queremos descubrir la `ip_target`
+- [x] Escanear los puertos TCP/UDP abiertos y enumerar los servicios corriendo
+- [x] Modificar las reglas del firewall para ver como influye en el escaneo
 
 Ahora vamos a familiarizarnos con las herramientas típicas de descubrimiento activo.
 `gobuster`y `seclist`
