@@ -16,8 +16,21 @@ AS{apachessl_NMAPCHECK}
 ```
 Encontramos una #flag 
 
-Vamos a probar a hacer `curl` a los servicios `http` y `https`:
+También hacemos esto para `UDP`:
+```
+sudo nmap -sU --top-port 100 192.168.10.23
+```
+Tiene un servicio abierto de `snmp` por lo que probamos su contraseña por defecto:
+```
+snmpwalk -v2c -c public 192.168.10.23 | grep AS
+```
+o
+```
+snmp-check 192.168.10.23 -c public
+```
+y así obtenemos su #flag AS_{snmp_nmapsCV}
 
+Vamos a probar a hacer `curl` a los servicios `http` y `https`:
 ```
 $ curl 192.168.10.23:8080
 AS_{http8080_COMPROBARHTTPS}
