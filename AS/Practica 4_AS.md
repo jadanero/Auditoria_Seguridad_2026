@@ -32,7 +32,7 @@ AS_{https4443_BUSCARDIRECTORIOS}
 Nos responde con una #flag
 Como la flag nos guiaba a buscar directorios hemos decidido hacer un `gobuster`:
 ```
-$ gobuster dir -u http://192.168.10.23/ -w /usr/share/seclists/Discovery/Web-Content/DirBuster-2007_directory-list-2.3-medium.txt
+$ gobuster dir -u http://192.168.10.23:8080/ -w /usr/share/seclists/Discovery/Web-Content/DirBuster-2007_directory-list-2.3-medium.txt
 ```
 Nos devuelve dos directorios: `hidden` y `funstuff`
 `hidden` directamente nos da una #flag  AS_{hiddendirectories_SIGUIENTEPASO} y nos dice que hagamos `ssh larrybird`
