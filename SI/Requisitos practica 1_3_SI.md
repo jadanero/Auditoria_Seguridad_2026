@@ -72,20 +72,25 @@ flowchart RL
 ```
 
 #### `linuxserver`
-- [ ] Deberá disponer de un servidor web **Apache**.
-- [ ] Deberá tener instalado y operativo **PHP**.
-- [ ] Deberá tener instalado y operativo **MariaDB**.
-- [ ] El usuario `dummyadmin` deberá disponer de permisos para utilizar **sudo** y poder ejecutar cualquier comando con privilegios administrativos.
-- [ ] Deberá instalarse **PowerShell** en el sistema.
-- [ ] `ssh` desde la maquina `si`
-- [ ] Samba para compartir archivos
+- [x] Deberá disponer de un servidor web **Apache**.
+- [x] Deberá tener instalado y operativo **PHP**.
+- [x] Deberá tener instalado y operativo **MariaDB**.
+- [x] El usuario `dummyadmin` deberá disponer de permisos para utilizar **sudo** y poder ejecutar cualquier comando con privilegios administrativos.
+- [x] Deberá instalarse **PowerShell** en el sistema.
+- [x] `ClamAV` para analizar archivos y generar registros
+- [x] `ssh` desde la maquina `si`
 - [ ] Actualizaciones manuales
+- [ ] Samba para compartir archivos 
+**COMENTARIO: INSTALADO PERO SA ERROR SU STATUS** 
+```
+sudo systemctl status samba.service
+```
+
 #### `windowsserver`
-- [ ] `ssh` desde la maquina `si` con `Openssh`
+- [x] `ssh` desde la maquina `si` con `Openssh`
 - [ ]  El usuario `dummyadmin` deberá pertenecer al grupo Administradores. 
-- [ ] Deberá habilitarse la administración remota `winrm`.
-- [ ] Activado el usuario `Administrador`
-- [ ] NFS para compartir directorios en red
+- [x] Deberá habilitarse la administración remota `winrm`.
+- [x] Activado el usuario `Administrador`
 - [ ] `ClamAV` para analizar archivos y generar registros
 - [ ] `NXLog Community Edition` a `linuxbackup`
 - [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
@@ -106,17 +111,17 @@ flowchart RL
 - [ ] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxbackup`
-- [ ] `ssh` desde la maquina `si`
-- [ ] `rsyslog` para la centralización de logs
-- [ ] `rdiff-backup` para realizar copias de seguridad. 
-- [ ] `NFS` para compartir directorios en red. 
+- [x] `ssh` desde la maquina `si`
+- [x] `rsyslog` para la centralización de logs
+- [x] `NFS` para compartir directorios en red. 
 - [ ] Actualizaciones manuales
-- [ ] Crear 3 usuarios `alice` `bob` y `trudy`
+- [x] Crear 3 usuarios `alice` `bob` y `trudy`
 
 #### `linuxclient`
-- [ ] `ssh` desde la maquina `si`
-- [ ] Crear usuario `Alice`
-- [ ] `EncFS` para crear directorios cifrados. `Alice` tiene un directorio cifrado en `NFS`
+- [x] `ssh` desde la maquina `si`
+- [x] Crear usuario `Alice`
+- [x] `EncFS` para crear directorios cifrados. `Alice` tiene un directorio cifrado en `NFS`
+- [x] `rdiff-backup` para realizar copias de seguridad. 
 - [ ] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxrouter1`
