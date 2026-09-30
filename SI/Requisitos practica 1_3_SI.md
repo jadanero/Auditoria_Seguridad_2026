@@ -92,7 +92,7 @@ sudo systemctl status samba.service
 - [x] Deberá habilitarse la administración remota `winrm`.
 - [x] Activado el usuario `Administrador`
 - [ ] `ClamAV` para analizar archivos y generar registros
-- [ ] `NXLog Community Edition` a `linuxbackup`
+- [ ] `NXLog Community Edition`
 - [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
 - [ ] Actualizaciones manuales
 - [ ] El servicio `IIS`
@@ -102,11 +102,11 @@ sudo systemctl status samba.service
 - [ ] Publicación de la página web
 
 #### `windowsclient1`
-- [ ] `ssh` desde la maquina `si` con `Openssh`
-- [ ] El usuario `dummyadmin` deberá pertenecer al grupo Administradores.
-- [ ] Deberá habilitarse la administración remota `winrm`.
-- [ ] Activado el usuario `Administrador`
-- [ ] `NXLog Community Edition` a `linuxbackup`
+- [x] `ssh` desde la maquina `si` con `Openssh`
+- [x] El usuario `dummyadmin` deberá pertenecer al grupo Administradores.
+- [x] Deberá habilitarse la administración remota `winrm`.
+- [x] Activado el usuario `Administrador`
+- [ ] `NXLog Community Edition`
 - [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
 - [ ] Actualizaciones automáticas mínimo cada 7 días
 
