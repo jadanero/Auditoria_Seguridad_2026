@@ -3,7 +3,7 @@ Se configurarán dos nuevas máquinas virtuales Linux:
 - [x] LinuxBackup: equipo destinado a actuar como servidor de backups y recepción de logs. 
 - [x] LinuxClient: equipo cliente desde el que se realizarán las diferentes pruebas. 
 
-Además, se utilizará la máquina LinuxServer configurada en la primera parte de la práctica. Durante la práctica se trabajará con los siguientes servicios y tecnologías: 
+Además, se utilizará la máquina `LinuxServer` configurada en la primera parte de la práctica. Durante la práctica se trabajará con los siguientes servicios y tecnologías: 
 - [x] Configuración de red mediante NAT y Host-Only. 
 - [x]  Gestión de usuarios. 
 - [x] rsyslog para la centralización de logs. 
