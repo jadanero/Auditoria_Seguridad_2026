@@ -111,17 +111,18 @@ flowchart RL
 - [ ] `rdiff-backup` para realizar copias de seguridad. 
 - [ ] `NFS` para compartir directorios en red. 
 - [ ] Actualizaciones manuales
+- [ ] Crear 3 usuarios `alice` `bob` y `trudy`
 
 #### `linuxclient`
 - [ ] `ssh` desde la maquina `si`
-- [ ] Crear 3 usuarios `alice` `bob` y `trudy`
-- [ ] EncFS para crear directorios cifrados. 
+- [ ] Crear usuario `Alice`
+- [ ] `EncFS` para crear directorios cifrados. `Alice` tiene un directorio cifrado en `NFS`
 - [ ] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxrouter1`
-- [ ] ip_forwarding=1
-- [ ] `ssh` desde la maquina `si`
+- [x] ip_forwarding=1
+- [x] `ssh` desde la maquina `si`
 #### `linuxrouter2`
-- [ ] ip_forwarding=1
-- [ ] `ssh` desde la maquina `si`
+- [x] ip_forwarding=1
+- [x] `ssh` desde la maquina `si`
 
