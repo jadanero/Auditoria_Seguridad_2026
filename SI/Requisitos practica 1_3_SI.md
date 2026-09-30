@@ -77,40 +77,51 @@ flowchart RL
 - [ ] Deberá tener instalado y operativo **MariaDB**.
 - [ ] El usuario `dummyadmin` deberá disponer de permisos para utilizar **sudo** y poder ejecutar cualquier comando con privilegios administrativos.
 - [ ] Deberá instalarse **PowerShell** en el sistema.
-- [ ] ssh desde la maquina `si`
-- [ ] Samba para compartir archivos. 
-- [ ] 
+- [ ] `ssh` desde la maquina `si`
+- [ ] Samba para compartir archivos
+- [ ] Actualizaciones manuales
 #### `windowsserver`
-- [ ] ssh desde la maquina `si` con `OpenSSH`
+- [ ] `ssh` desde la maquina `si` con `Openssh`
 - [ ]  El usuario `dummyadmin` deberá pertenecer al grupo Administradores. 
 - [ ] Deberá habilitarse la administración remota `winrm`.
 - [ ] Activado el usuario `Administrador`
 - [ ] NFS para compartir directorios en red
 - [ ] `ClamAV` para analizar archivos y generar registros
+- [ ] `NXLog Community Edition` a `linuxbackup`
+- [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
+- [ ] Actualizaciones manuales
+- [ ] El servicio `IIS`
+- [ ] El servicio `Web-CGI`
+- [ ] Instalación y configuración de PHP
+- [ ] Resolución de errores 500
+- [ ] Publicación de la página web
 
 #### `windowsclient1`
-- [ ] ssh desde la maquina `si` con `OpenSSH`
+- [ ] `ssh` desde la maquina `si` con `Openssh`
 - [ ] El usuario `dummyadmin` deberá pertenecer al grupo Administradores.
 - [ ] Deberá habilitarse la administración remota `winrm`.
 - [ ] Activado el usuario `Administrador`
-- [ ] 
+- [ ] `NXLog Community Edition` a `linuxbackup`
+- [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
+- [ ] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxbackup`
-- [ ] ssh desde la maquina `si`
+- [ ] `ssh` desde la maquina `si`
 - [ ] `rsyslog` para la centralización de logs
 - [ ] `rdiff-backup` para realizar copias de seguridad. 
 - [ ] `NFS` para compartir directorios en red. 
+- [ ] Actualizaciones manuales
 
 #### `linuxclient`
-- [ ] ssh desde la maquina `si`
+- [ ] `ssh` desde la maquina `si`
 - [ ] Crear 3 usuarios `alice` `bob` y `trudy`
 - [ ] EncFS para crear directorios cifrados. 
-- [ ] 
+- [ ] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxrouter1`
 - [ ] ip_forwarding=1
-- [ ] ssh desde la maquina `si`
+- [ ] `ssh` desde la maquina `si`
 #### `linuxrouter2`
 - [ ] ip_forwarding=1
-- [ ] ssh desde la maquina `si`
+- [ ] `ssh` desde la maquina `si`
 
