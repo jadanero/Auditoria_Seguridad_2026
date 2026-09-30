@@ -213,3 +213,11 @@ touch /mnt/nfs_share/prueba_escritura.txt
 ```
 y comprobar que se crea en `LinuxBackup`
 
+
+
+
+
+
+
+#### Envío de logs desde Windows
+El equipo `windowsserver` deberá configurarse para enviar los registros de eventos del sistema al servidor centralizado de logs. Para ello deberemos instalar el programa libre `NXLog Community Edition`.
