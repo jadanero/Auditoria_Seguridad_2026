@@ -324,10 +324,17 @@ Después comprobamos en `linuxbackup` los archivos modificados recientemente y s
 ## Instalación y configuración de IIS
 Para ello deberemos instalar esto:
 ```
-Install-WindowsFeature Web-Server
+Install-WindowsFeature Web-Server,Web-CGI
 ```
+Comprobamos que hemos instalado bien:
 ```
-Install-WindowsFeature Web-CGI
+PS C:\Users\administrador> Get-WindowsFeature Web-Server, Web-CGI   
+
+Display Name                                            Name                       Install State
+------------                                            ----                       -------------
+[X] Servidor web (IIS)                                  Web-Server                     Installed
+            [X] CGI                                     Web-CGI                        Installed
+
 ```
 
 

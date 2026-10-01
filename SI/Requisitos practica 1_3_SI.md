@@ -79,18 +79,18 @@ flowchart RL
 - [x] `ClamAV` para analizar archivos y generar registros
 - [x] `ssh` desde la maquina `si`
 - [ ] guardar backups automáticos diarios con `cron` en el samba de `linuxbackup`
-- [ ] Actualizaciones manuales
+- [x] Actualizaciones manuales
 - [ ] `Samba` para compartir archivos
 
 #### `windowsserver`
 - [x] `ssh` desde la maquina `si` con `Openssh`
-- [ ]  El usuario `dummyadmin` deberá pertenecer al grupo Administradores. 
+- [x]  El usuario `dummyadmin` deberá pertenecer al grupo Administradores. 
 - [x] Deberá habilitarse la administración remota `winrm`.
 - [x] Activado el usuario `Administrador`
 - [ ] `ClamAV` para analizar archivos y generar registros
-- [ ] `NXLog Community Edition`
+- [x] `NXLog Community Edition`
 - [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
-- [ ] Actualizaciones manuales
+- [x] Actualizaciones manuales
 - [ ] El servicio `IIS`
 - [ ] El servicio `Web-CGI`
 - [ ] Instalación y configuración de PHP
@@ -102,15 +102,14 @@ flowchart RL
 - [x] El usuario `dummyadmin` deberá pertenecer al grupo Administradores.
 - [x] Deberá habilitarse la administración remota `winrm`.
 - [x] Activado el usuario `Administrador`
-- [ ] `NXLog Community Edition`
-- [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
-- [ ] Actualizaciones automáticas mínimo cada 7 días
+- [x] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
+- [x] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxbackup`
 - [x] `ssh` desde la maquina `si`
 - [x] `rsyslog` para la centralización de logs
 - [x] `NFS` para compartir directorios en red. 
-- [ ] Actualizaciones manuales
+- [x] Actualizaciones manuales
 - [x] Crear 3 usuarios `alice` `bob` y `trudy`
 - [ ] `Samba` para guardar los backups de `linuxserver`
 
@@ -119,7 +118,7 @@ flowchart RL
 - [x] Crear usuario `Alice`
 - [x] `EncFS` para crear directorios cifrados. `Alice` tiene un directorio cifrado en `NFS`
 - [x] `rdiff-backup` para realizar copias de seguridad. 
-- [ ] Actualizaciones automáticas mínimo cada 7 días
+- [x] Actualizaciones automáticas mínimo cada 7 días
 
 #### `linuxrouter1`
 - [x] ip_forwarding=1
