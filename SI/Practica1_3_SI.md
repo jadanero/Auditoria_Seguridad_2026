@@ -194,6 +194,24 @@ Para comprobar que funciona otra vez:
 logger "Prueba rsyslog hacia LinuxBackup tras resegmentacion"
 ```
 
+#### ACTIVAR ADMINISTRADOR
+```
+Enable-LocalUser -Name "Administrador"  
+```
+
+```
+Set-LocalUser -Name "palangana2026.ABC" -Password $Password
+```
+#### QUITAR ICMP DEL FIREWALL WINDOWS
+```
+Meter eso en los dos Windows para que nos permite los pings
+```
+
+```
+Enable-NetFirewallRule -Name "FPS-ICMP4-ERQ-In"
+```
+Hacemos esto para poder hacer ping a la maquina. Y saber que ya está running
+
 #### NFS
 Modificar en `LinuxServer`:
 `/etc/exports`:
@@ -213,11 +231,88 @@ touch /mnt/nfs_share/prueba_escritura.txt
 ```
 y comprobar que se crea en `LinuxBackup`
 
-
-
-
-
-
-
-#### Envío de logs desde Windows
+## `NXLog`
 El equipo `windowsserver` deberá configurarse para enviar los registros de eventos del sistema al servidor centralizado de logs. Para ello deberemos instalar el programa libre `NXLog Community Edition`.
+Creamos un directorio para almacenar temporalmente el instalador:
+
+```
+$New-Item -ItemType Directory -Path C:\Temp\NXLog -Force
+```
+Posteriormente comprobamos que existía:
+```
+$Test-Path "C:\Temp\NXLog"
+```
+Resultado: `True`
+
+Descargamos el instalador de `NXLog Community Edition` dentro de `C:\Temp\NXLog`
+La instalación se realizó mediante `msiexec` en modo silencioso:
+```
+$msiexec /i "C:\Temp\NXLog\nxlog-ce-3.2.2329.msi" /qn /norestart
+```
+
+Después comprobamos que el archivo de configuración había sido instalado:
+```
+$Test-Path "C:\Program Files\nxlog\conf\nxlog.conf"
+```
+Resultado: `True`
+
+También comprobamos el servicio:
+```
+Get-Service nxlog
+```
+Resultado:
+```
+Status   Name    DisplayName
+
+------   ----    -----------
+
+Running  nxlog   nxlog
+```
+
+Modificamos el fichero `C:\Program Files\nxlog\conf\nxlog.conf`  
+Lo que tenemos que modificar es el final del archivo
+```
+<Extension _syslog>
+
+    Module      xm_syslog
+
+</Extension>  
+<Input in>
+
+    Module  im_msvistalog
+
+</Input>
+
+<Output out>
+
+    Module      om_tcp
+
+    Host        192.168.57.10
+
+    Port        513
+
+    Exec        to_syslog_ietf();
+
+</Output>  
+<Route windows_to_linux>
+
+    Path    in => out
+
+</Route>
+```
+Reiniciamos el servicio:  
+```
+$Restart-Service nxlog
+```
+Comprobamos nuevamente la conectividad:
+```
+$Test-NetConnection 192.168.57.10 -Port 513
+```
+Resultado: `TcpTestSucceeded : True`
+
+Finalmente realizamos una prueba generando un evento desde `windowsserver`. Se utilizó:
+```
+eventcreate /T INFORMATION /ID 1000 /L APPLICATION /SO NXLogTest /D "Prueba de envio de logs desde WindowsServer mediante NXLog"
+```
+Después comprobamos en `linuxbackup` los archivos modificados recientemente y se generan.
+
