@@ -317,3 +317,18 @@ eventcreate /T INFORMATION /ID 1000 /L APPLICATION /SO NXLogTest /D "Prueba de e
 Después comprobamos en `linuxbackup` los archivos modificados recientemente y se generan.
 
 ## Servicio de actualizaciones mediante línea de comandos
+
+
+
+
+## Instalación y configuración de IIS
+Para ello deberemos instalar esto:
+```
+Install-WindowsFeature Web-Server
+```
+```
+Install-WindowsFeature Web-CGI
+```
+
+
+
