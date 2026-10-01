@@ -78,12 +78,9 @@ flowchart RL
 - [x] Deberá instalarse **PowerShell** en el sistema.
 - [x] `ClamAV` para analizar archivos y generar registros
 - [x] `ssh` desde la maquina `si`
+- [ ] guardar backups automáticos diarios con `cron` en el samba de `linuxbackup`
 - [ ] Actualizaciones manuales
-- [ ] Samba para compartir archivos 
-**COMENTARIO: INSTALADO PERO SA ERROR SU STATUS** 
-```
-sudo systemctl status samba.service
-```
+- [ ] `Samba` para compartir archivos
 
 #### `windowsserver`
 - [x] `ssh` desde la maquina `si` con `Openssh`
@@ -115,6 +112,7 @@ sudo systemctl status samba.service
 - [x] `NFS` para compartir directorios en red. 
 - [ ] Actualizaciones manuales
 - [x] Crear 3 usuarios `alice` `bob` y `trudy`
+- [ ] `Samba` para guardar los backups de `linuxserver`
 
 #### `linuxclient`
 - [x] `ssh` desde la maquina `si`
