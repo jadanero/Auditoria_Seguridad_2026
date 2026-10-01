@@ -337,5 +337,65 @@ Display Name                                            Name                    
 
 ```
 
+#### `php`
+Descargamos `php`:
+```
+Invoke-WebRequest `
+-Uri "https://downloads.php.net/~windows/releases/archives/php-8.5.10-nts-Win32-vs17-x64.zip" `
+-OutFile "$env:TEMP\php.zip"
+```
 
+Creamos el directorio `C:\PHP`:
+```
+New-Item -ItemType Directory -Path C:\PHP -Force
+```
+Y descomprimimos:
+```
+Expand-Archive `
+  -Path "$env:TEMP\php.zip" `
+  -DestinationPath C:\PHP `
+  -Force
+```
+Comprobamos que tenemos el ejecutable:
+```
+Test-Path C:\PHP\php-cgi.exe
+```
+Nos devuelve `True`
 
+Le damos permisos a `IIS`:
+```
+icacls C:\PHP /grant "IIS_IUSRS:(OI)(CI)(RX)" /T
+```
+Comprobar `AppCmd`
+```
+Test-Path C:\Windows\System32\inetsrv\appcmd.exe
+```
+Devuelve: `True`
+
+Registrar `php-cgi.exe` como `FastCGI`:
+```
+$appcmd = "C:\Windows\System32\inetsrv\appcmd.exe"
+& $appcmd set config /section:system.webServer/fastCgi /+"[fullPath='C:\PHP\php-cgi.exe']"
+& $appcmd list config /section:system.webServer/fastCgi
+```
+
+Crear el handler para los `.php`:
+```
+& $appcmd unlock config /section:system.webServer/handlers
+```
+Primero los desbloqueamos y después modificamos lo que nos pide el enunciado
+```
+& $appcmd set config "Default Web Site" /section:system.webServer/handlers /+"[name='PHP-FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='C:\PHP\php-cgi.exe',resourceType='File']"
+```
+Comprobamos:
+```
+<system.webServer>
+  <handlers accessPolicy="Read, Script">
+    <add name="PHP-FastCGI" path="*.php" verb="*" modules="FastCgiModule" scriptProcessor="C:\PHP\php-cgi.exe" resourceType="File" />
+    <add name="CGI-exe" path="*.exe" verb="*" modules="CgiModule" resourceType="File" requireAccess="Execute" allowPathInfo="true" />
+    <add name="TRACEVerbHandler" path="*" verb="TRACE" modules="ProtocolSupportModule" requireAccess="None" />
+    <add name="OPTIONSVerbHandler" path="*" verb="OPTIONS" modules="ProtocolSupportModule" requireAccess="None" />
+    <add name="StaticFile" path="*" verb="*" modules="StaticFileModule,DefaultDocumentModule,DirectoryListingModule" resourceType="Either" requireAccess="Read" />
+  </handlers>
+</system.webServer>
+```
