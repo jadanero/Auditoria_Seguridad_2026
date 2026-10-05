@@ -418,3 +418,38 @@ Comprobamos:
   </handlers>
 </system.webServer>
 ```
+
+Hacemos un script de prueba:
+```
+@"
+<?php
+phpinfo();
+?>
+"@ | Set-Content C:\inetpub\wwwroot\info.php
+```
+y lo probamos:
+```
+Invoke-WebRequest http://localhost/info.php -UseBasicParsing
+```
+Nos devuelve el `status` de la conexión los `headers` y más.
+Entonces ya tenemos instalado `php`:
+- [x]  IIS instalado
+- [x]  Web-CGI instalado
+- [x]  PHP instalado
+- [x]  `php-cgi.exe` funciona
+- [x]  FastCGI configurado
+- [x]  `FastCgiModule`
+- [x]  Handler `*.php`
+- [x]  `scriptProcessor → C:\PHP\php-cgi.exe`
+- [x]  PHP ejecutándose correctamente desde IIS
+
+## Publicación de la pagina Web
+#### `Windowsserver`
+Para  acceder al servidor `Samba` donde descargamos las `ISOs`
+```
+net view \\10.6.24.100
+```
+Una vez vemos lo que hay dentro accedemos a la carpeta que nos interesa:
+```
+Copy-Item \\10.6.24.100\ISOs\web.zip C:\Temp\web.zip
+```
