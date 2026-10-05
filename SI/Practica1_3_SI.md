@@ -375,6 +375,8 @@ Devuelve: `True`
 Registrar `php-cgi.exe` como `FastCGI`:
 ```
 $appcmd = "C:\Windows\System32\inetsrv\appcmd.exe"
+```
+```
 & $appcmd set config /section:system.webServer/fastCgi /+"[fullPath='C:\PHP\php-cgi.exe']"
 & $appcmd list config /section:system.webServer/fastCgi
 ```
