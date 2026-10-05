@@ -372,6 +372,23 @@ Test-Path C:\Windows\System32\inetsrv\appcmd.exe
 ```
 Devuelve: `True`
 
+Una dependencia clave para esto es `Microsoft Visual C++`, por lo tanto, lo descargamos:
+```
+Invoke-WebRequest "https://aka.ms/vc14/vc_redist.x64.exe" -OutFile "$env:TEMP\vc_redist.x64.exe"
+```
+Una vez descargado lo instalamos:
+```
+Start-Process "$env:TEMP\vc_redist.x64.exe" -ArgumentList "/install /quiet /norestart" -Wait
+```
+y comprobamos que está bien instalado:
+```
+Get-ItemProperty `
+  "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" `
+  -ErrorAction SilentlyContinue |
+Where-Object { $_.DisplayName -like "*Visual C++*" } |
+Select-Object DisplayName, DisplayVersion
+```
+
 Registrar `php-cgi.exe` como `FastCGI`:
 ```
 $appcmd = "C:\Windows\System32\inetsrv\appcmd.exe"
