@@ -453,3 +453,11 @@ Una vez vemos lo que hay dentro accedemos a la carpeta que nos interesa:
 ```
 Copy-Item \\10.6.24.100\ISOs\web.zip C:\Temp\web.zip
 ```
+Una vez descargado:
+```
+Expand-Archive C:\Temp\web.zip -DestinationPath C:\inetpub\wwwroot\web -Force
+```
+Vemos su contenido:
+```
+Get-ChildItem C:\inetpub\wwwroot\web
+```
