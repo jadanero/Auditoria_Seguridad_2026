@@ -461,3 +461,9 @@ Vemos su contenido:
 ```
 Get-ChildItem C:\inetpub\wwwroot\web
 ```
+Para que `IIS` pueda actualizar los logs:
+```
+icacls C:\inetpub\wwwroot\web\data /grant "IIS_IUSRS:(OI)(CI)(M)" /T
+```
+`M` Modify → lectura, escritura, modificación y ejecución.
+
