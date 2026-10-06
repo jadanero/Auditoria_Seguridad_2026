@@ -466,4 +466,11 @@ Para que `IIS` pueda actualizar los logs:
 icacls C:\inetpub\wwwroot\web\data /grant "IIS_IUSRS:(OI)(CI)(M)" /T
 ```
 `M` Modify → lectura, escritura, modificación y ejecución.
+`(OI)(CI)` = se hereda a archivos y subdirectorios.
+`/T` = recursivamente.
+
+Accedemos desde la máquina `SI` y vemos que la web que solicitamos funciona en `192.168.57.11/web/index.php`
+
+#### `linuxserver`
+
 
