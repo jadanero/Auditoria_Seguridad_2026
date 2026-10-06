@@ -317,6 +317,168 @@ eventcreate /T INFORMATION /ID 1000 /L APPLICATION /SO NXLogTest /D "Prueba de e
 Después comprobamos en `linuxbackup` los archivos modificados recientemente y se generan.
 
 ## Servicio de actualizaciones mediante línea de comandos
+#### `windowsserver`
+Configurar el sistema `WindowsServer` para poder gestionar las actualizaciones de Windows desde una terminal, incluyendo la posibilidad de ejecutar el proceso mediante una conexión `ssh`.
+Además, en los equipos destinados a funcionar como servidores, el enunciado establece que las actualizaciones **no deben ejecutarse periódicamente**, sino que deben realizarse únicamente de forma manual.
+
+Para ello se utilizará:
+- `PowerShell`
+- Módulo `PSWindowsUpdate`
+- `schtasks.exe`
+- Una tarea programada ejecutada con la cuenta SYSTEM.
+
+###### **Instalación de `PSWindowsUpdate`**
+El módulo utilizado para gestionar Windows Update desde PowerShell es `PSWindowsUpdate`.
+La instalación se realizó mediante:
+```
+$Install-Module PSWindowsUpdate -Force
+```
+Posteriormente se importó el módulo:
+```
+$Import-Module PSWindowsUpdate
+```
+Para comprobar que el módulo está instalado:
+```
+$Get-Module -ListAvailable PSWindowsUpdate
+```
+Resultado obtenido:
+```
+ModuleType Version    Name
+
+Binary     2.2.1.5    PSWindowsUpdate
+```
+Por tanto, el módulo `PSWindowsUpdate` está correctamente instalado en `windowsserver`.
+###### **Comprobación de `Windows Update` desde `PowerShell`**
+Una vez instalado el módulo, se puede consultar `Windows Update` desde `PowerShell` mediante:
+```
+$Get-WindowsUpdate
+```
+Este comando permite **consultar las actualizaciones** disponibles en el sistema.
+Para instalar las actualizaciones se utiliza:
+```
+$Install-WindowsUpdate -AcceptAll
+```
+Durante las pruebas se utilizó también:
+```
+$Install-WindowsUpdate -AcceptAll -IgnoreReboot
+```
+El parámetro `-AcceptAll` permite aceptar todas las actualizaciones encontradas sin solicitar confirmación individual.
+El parámetro `-IgnoreReboot` evita que el proceso reinicie automáticamente el equipo durante las pruebas.
+
+###### **Creación del script de actualización**
+Para evitar problemas de comillas y comandos complejos al ejecutar `PowerShell` desde `schtasks.exe`, se creó un script independiente.
+Se creó el directorio:
+```
+$mkdir C:\Scripts
+```
+Y el archivo:
+```
+C:\Scripts\updatewindows.ps1
+```
+Contenido del script:
+```
+$Import-Module PSWindowsUpdate
+$Install-WindowsUpdate -AcceptAll -IgnoreReboot
+```
+Se comprobó posteriormente su contenido mediante:
+```
+$Get-Content C:\Scripts\updatewindows.ps1
+```
+El resultado confirmó que el script contiene los comandos necesarios para importar `PSWindowsUpdate` y ejecutar las actualizaciones.
+
+###### **Creación de la tarea programada**
+El objetivo de la tarea es permitir que el proceso de actualización pueda ejecutarse bajo una cuenta con los permisos necesarios, independientemente de la sesión SSH del usuario.
+La tarea se creó mediante:
+```
+$schtasks.exe /create /tn "updatewindows" /sc once /st 23:59 /ru SYSTEM /tr "powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\Scripts\updatewindows.ps1"
+```
+**Parámetros utilizados**:
+
+| **Parámetro**       | **Función**                                      |
+| ------------------- | ------------------------------------------------ |
+| /créate             | Crea una nueva tarea programada                  |
+| /tn "updatewindows" | Nombre de la tarea                               |
+| /sc once            | Configura una programación de una sola ejecución |
+| /st 23:59           | Establece una hora válida para la programación   |
+| /ru SYSTEM          | Ejecuta la tarea como SYSTEM                     |
+| /tr                 | Define el programa que debe ejecutarse           |
+
+La tarea **no se configura de forma periódica** porque el servidor debe actualizarse únicamente bajo demanda.
+
+###### **Comprobación de la tarea**
+La configuración se comprobó mediante:
+```
+$schtasks.exe /query /tn "updatewindows" /fo LIST /v
+```
+Entre los valores obtenidos destacan:
+```
+Estado de tarea programada: Habilitado
+Ejecutar como usuario:      SYSTEM
+Tipo de programación:       Solo una vez
+Repetir: cada:              Deshabilitado
+```
+Esto demuestra que:
+1. La tarea está habilitada.
+2. Se ejecuta con la cuenta SYSTEM.
+3. No existe una programación periódica.
+4. Cumple el requisito establecido para los servidores.
+
+###### **Ejecución manual mediante /run**
+El enunciado establece que en los servidores las actualizaciones deben realizarse **manualmente**.
+Para ello se utilizó:
+```
+$schtasks.exe /run /tn "updatewindows"
+```
+Este comando permite iniciar inmediatamente la tarea programada sin esperar a la hora establecida en su programación. De esta forma, la actualización puede iniciarse desde una conexión SSH utilizando únicamente la línea de comandos.
+
+###### **Comprobación de la ejecución**
+Después de ejecutar:
+```
+$schtasks.exe /run /tn "updatewindows"
+```
+se comprobó que la tarea había comenzado a ejecutarse mediante:
+```
+$schtasks.exe /query /tn "updatewindows" /fo LIST /v
+```
+Durante la ejecución se observó:
+```
+Estado: En ejecución
+Ejecutar como usuario: SYSTEM
+```
+También se comprobó que los procesos necesarios de `Windows Update` estaban activos:
+```
+$Get-Service wuauserv,bits
+```
+Resultado:
+```
+Status   Name
+Running  bits
+Running  wuauserv
+```
+Esto confirma que tanto `BITS` como `Windows Update` estaban funcionando durante el proceso.
+
+###### **Verificación de las actualizaciones instaladas**
+Finalmente, se comprobó el historial de `Windows Update`:
+```
+$Get-WUHistory | Select-Object -First 5
+```
+Se obtuvieron varias operaciones con resultado: `Succeeded`
+Entre ellas aparecieron instalaciones realizadas a las `10:08`, `10:11` y `10:12` del `01/10/2026`.
+Por tanto, se pudo comprobar que la ejecución de la tarea no se limitó a iniciar PowerShell, sino que el proceso de `PSWindowsUpdate` realizó correctamente instalaciones de actualizaciones.
+
+#### `windowsclient1`
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
