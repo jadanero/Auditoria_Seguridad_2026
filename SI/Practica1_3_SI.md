@@ -781,3 +781,192 @@ dummyadmin@linuxserver:~$ sudo tail -n 0 -f /var/log/apache2/access.log
 Comprobamos que funciona el servicio desde la maquina `SI`.
 
 ## Configuración de PHP en Windows
+>En este apartado se configura PHP en el `windowsserver` para controlar el tratamiento de los errores generados por las aplicaciones PHP. Se establece que los errores no sean mostrados directamente al usuario, pero que sean registrados en un fichero de log para facilitar su posterior análisis y diagnóstico.
+
+La configuración solicitada es:
+```
+[PHP]
+display_errors = Off
+log_errors = On
+error_log = "c:\windows\temp\php_errors.log"
+```
+
+De esta forma, los errores de PHP quedan ocultos para el usuario final, pero son almacenados en:
+```
+C:\Windows\Temp\php_errors.log
+```
+
+#### Localización de `PHP`
+PHP se encuentra instalado en:
+```
+C:\PHP
+```
+Se comprueba que el ejecutable de PHP está disponible:
+```
+Test-Path C:\PHP\php-cgi.exe
+```
+
+El resultado obtenido es:
+```
+True
+```
+
+También se puede comprobar directamente la versión instalada:
+```
+C:\PHP\php-cgi.exe -v
+```
+
+#### Configuración del archivo `php.ini`
+Se comprueba inicialmente si existe el fichero de configuración:
+```powershell
+Test-Path C:\PHP\php.ini
+```
+
+En caso de que no exista, se puede crear a partir del fichero de configuración de desarrollo incluido con PHP:
+```powershell
+Copy-Item C:\PHP\php.ini-development C:\PHP\php.ini
+```
+
+Una vez disponible `php.ini`, se configuran los parámetros relacionados con la gestión de errores.
+Los valores que deben quedar establecidos son:
+```
+display_errors = Off
+log_errors = On
+error_log = "c:\windows\temp\php_errors.log"
+```
+
+Para comprobar los valores configurados en el fichero:
+```powershell
+Select-String -Path C:\PHP\php.ini -Pattern "display_errors|log_errors|error_log"
+```
+El resultado debe mostrar los parámetros configurados con los valores indicados anteriormente.
+
+#### Permisos sobre el directorio de logs
+El proceso PHP se ejecuta mediante IIS/FastCGI, por lo que es necesario garantizar que la cuenta utilizada por IIS pueda escribir en el directorio donde se almacenará el registro.
+Se conceden permisos de modificación al grupo `IIS_IUSRS` sobre `C:\Windows\Temp`:
+```powershell
+icacls C:\Windows\Temp /grant "IIS_IUSRS:(OI)(CI)(M)"
+```
+Los parámetros utilizados tienen el siguiente significado:
+
+- `IIS_IUSRS`: grupo de usuarios utilizado por IIS.
+- `(OI)`: los permisos se heredan por los archivos.
+- `(CI)`: los permisos se heredan por los subdirectorios.
+- `(M)`: permiso de modificación.
+Se pueden comprobar posteriormente los permisos mediante:
+```powershell
+icacls C:\Windows\Temp
+```
+
+#### Comprobación de la configuración efectiva de PHP
+Para comprobar que PHP está utilizando realmente los valores configurados en `php.ini`, se ejecuta:
+```powershell
+C:\PHP\php-cgi.exe -i | Select-String "display_errors|log_errors|error_log"
+```
+
+Se obtiene:
+```
+<tr><td class="e">display_errors</td><td class="v">Off</td><td class="v">Off</td></tr>
+<tr><td class="e">error_log</td><td class="v">c:\windows\temp\php_errors.log</td><td class="v">c:\windows\temp\php_errors.log</td></tr>
+<tr><td class="e">error_log_mode</td><td class="v">0644</td><td class="v">0644</td></tr>
+<tr><td class="e">log_errors</td><td class="v">On</td><td class="v">On</td></tr>
+```
+
+Los valores obtenidos confirman que:
+```
+display_errors = Off
+log_errors = On
+error_log = c:\windows\temp\php_errors.log
+```
+Por tanto, PHP ha cargado correctamente la configuración.
+
+#### Reinicio de IIS
+Después de modificar la configuración de PHP, se reinicia IIS para garantizar que los procesos de PHP utilizados por FastCGI carguen la nueva configuración:
+```powershell
+iisreset
+```
+
+El comando debe finalizar indicando que los servicios de IIS se han reiniciado correctamente.
+También se puede comprobar que el servicio de IIS se encuentra activo mediante:
+```powershell
+Get-Service W3SVC
+```
+El estado esperado es:
+```
+Status   Name   DisplayName
+------   ----   -----------
+Running  W3SVC  World Wide Web Publishing Service
+```
+
+#### Comprobación del funcionamiento de la aplicación web
+Una vez configurado PHP, se comprueba que la aplicación web continúa funcionando correctamente.
+Desde `PowerShell` se realiza una petición a la aplicación:
+```powershell
+Invoke-WebRequest http://localhost/web/index.php -UseBasicParsing
+```
+La respuesta obtenida presenta:
+```
+StatusCode        : 200
+StatusDescription : OK
+```
+El código HTTP `200` confirma que IIS ha podido procesar correctamente la petición y ejecutar la aplicación PHP.
+Es importante comprobar que, aunque existan errores o warnings de PHP, estos no se muestran directamente al usuario debido a:
+```
+display_errors = Off
+```
+
+#### Comprobación del fichero de registro
+Se comprueba si PHP ha creado el fichero de log:
+```powershell
+Test-Path C:\Windows\Temp\php_errors.log
+```
+El resultado obtenido es:
+```
+True
+```
+
+A continuación se consulta su contenido:
+```powershell
+Get-Content C:\Windows\Temp\php_errors.log
+```
+Se obtuvieron los siguientes registros:
+```
+[07-Oct-2026 08:10:42 UTC] PHP Warning:  Undefined array key "logout" in C:\inetpub\wwwroot\web\index.php on line 8
+[07-Oct-2026 08:10:42 UTC] PHP Warning:  Undefined array key "type" in C:\inetpub\wwwroot\web\index.php on line 17
+[07-Oct-2026 08:10:42 UTC] PHP Warning:  Undefined array key "type" in C:\inetpub\wwwroot\web\index.php on line 21
+```
+
+Estos mensajes corresponden a advertencias generadas durante la ejecución de la aplicación.
+También se puede utilizar el siguiente comando para visualizar el fichero de log en tiempo real:
+```powershell
+Get-Content C:\Windows\Temp\php_errors.log -Wait
+```
+De esta forma, cualquier nuevo error generado por PHP aparecerá automáticamente en la consola.
+
+#### Resultado
+La configuración realizada permite separar la información mostrada al usuario de la información destinada al administrador del sistema.
+El funcionamiento final es:
+```
+                 Petición HTTP
+                       │
+                       ▼
+                    IIS/PHP
+                       │
+                ┌──────┴──────┐
+                │             │
+          display_errors   log_errors
+              Off              On
+                │               │
+                ▼               ▼
+        No mostrar error   php_errors.log
+        al usuario         C:\Windows\Temp\
+                           php_errors.log
+```
+La configuración queda validada mediante tres comprobaciones:
+1. `display_errors` aparece configurado como `Off`.
+2. `log_errors` aparece configurado como `On` y `error_log` apunta a `C:\Windows\Temp\php_errors.log`.
+3. La aplicación genera warnings que no se muestran al usuario y que quedan registrados en el fichero de log.
+
+Por tanto, se cumple la configuración solicitada en el enunciado para la gestión de errores de PHP en el servidor Windows.
+
+## Configuración de PHP en Linux
