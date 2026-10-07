@@ -970,3 +970,195 @@ La configuración queda validada mediante tres comprobaciones:
 Por tanto, se cumple la configuración solicitada en el enunciado para la gestión de errores de PHP en el servidor Windows.
 
 ## Configuración de PHP en Linux
+En este apartado se configura PHP en el `linuxserver` para controlar la visualización y el registro de errores generados por las aplicaciones web.
+
+El objetivo es utilizar la misma configuración establecida en el servidor Windows: los errores de PHP no deben mostrarse directamente al usuario, pero sí deben quedar registrados en un fichero de log para poder analizarlos posteriormente.
+
+La configuración utilizada es:
+```
+display_errors = Off
+log_errors = On
+error_log = /var/log/php_errors.log
+```
+
+De esta forma, los errores de PHP se almacenan en:
+```
+/var/log/php_errors.log
+```
+
+#### Comprobación de la instalación de PHP
+Se comprueba que PHP está instalado correctamente mediante:
+```bash
+php -v
+```
+
+También se comprueba la ubicación de la configuración utilizada por PHP:
+```bash
+php --ini
+```
+
+Inicialmente este comando muestra:
+```
+Loaded Configuration File: /etc/php/8.4/cli/php.ini
+```
+
+Este fichero corresponde a la configuración de PHP para la línea de comandos. Puesto que la aplicación web se ejecuta mediante Apache, es necesario utilizar la configuración de PHP correspondiente al módulo de Apache.
+
+Se comprueba que existe dicho fichero:
+```bash
+ls -l /etc/php/8.4/apache2/php.ini
+```
+
+El fichero utilizado para configurar PHP en el servidor web es:
+```
+/etc/php/8.4/apache2/php.ini
+```
+
+#### Configuración de `php.ini`
+Se edita el fichero de configuración de PHP utilizado por Apache:
+```bash
+sudo nano /etc/php/8.4/apache2/php.ini
+```
+
+Dentro del fichero se localizan los parámetros relacionados con la gestión de errores y se establecen los siguientes valores:
+```
+display_errors = Off
+log_errors = On
+error_log = /var/log/php_errors.log
+```
+
+La configuración tiene el siguiente comportamiento:
+- `display_errors = Off`: evita que los errores de PHP se muestren directamente en la página web.
+- `log_errors = On`: activa el registro de errores.
+- `error_log = /var/log/php_errors.log`: establece el fichero donde se almacenarán los errores.
+#### Creación del fichero de log
+Se crea el fichero destinado a almacenar los errores de `PHP`:
+```bash
+sudo touch /var/log/php_errors.log
+```
+
+Como Apache necesita poder escribir en este fichero, se asigna su propiedad al usuario utilizado por el servidor web, `www-data`:
+```bash
+sudo chown www-data:www-data /var/log/php_errors.log
+```
+
+Se establecen permisos para permitir que el propietario pueda leer y escribir en el fichero:
+```bash
+sudo chmod 640 /var/log/php_errors.log
+```
+
+Los permisos pueden comprobarse mediante:
+```bash
+ls -l /var/log/php_errors.log
+```
+
+El fichero debe aparecer con el usuario y grupo `www-data`:
+```
+-rw-r----- 1 www-data www-data ... /var/log/php_errors.log
+```
+
+#### Reinicio de Apache
+Una vez modificada la configuración de PHP, se reinicia `Apache` para que el servidor web cargue los nuevos parámetros:
+```bash
+sudo systemctl restart apache2
+```
+
+Se comprueba que Apache continúa funcionando correctamente:
+```bash
+systemctl status apache2 --no-pager
+```
+
+El servicio debe encontrarse en estado:
+```
+Active: active (running)
+```
+
+#### Comprobación de la configuración mediante Apache
+Para comprobar que la configuración utilizada por PHP desde Apache es la correcta, se crea temporalmente una página `phpinfo()`.
+
+Se crea el fichero:
+```bash
+echo '<?php phpinfo(); ?>' | sudo tee /var/www/html/info.php
+```
+
+A continuación, desde un navegador web se accede a:
+```
+http://192.168.56.10/info.php
+```
+
+En la página generada por `phpinfo()` se comprueban los parámetros:
+```
+display_errors
+log_errors
+error_log
+```
+
+Los valores deben ser:
+```
+display_errors    Off
+log_errors        On
+error_log         /var/log/php_errors.log
+```
+
+Esta comprobación permite verificar que la configuración utilizada realmente por PHP al ejecutarse mediante Apache coincide con la configuración establecida en:
+```
+/etc/php/8.4/apache2/php.ini
+```
+
+#### Comprobación del fichero de errores
+Se consulta el contenido del fichero de registro mediante:
+```bash
+sudo tail -f /var/log/php_errors.log
+```
+
+El comando `tail -f` permite visualizar en tiempo real las nuevas entradas que PHP vaya añadiendo al fichero.
+
+Si la aplicación genera algún `warning` o `error`, este debe aparecer en:
+```text
+/var/log/php_errors.log
+```
+
+y no debe mostrarse directamente al usuario debido a:
+```ini
+display_errors = Off
+```
+
+#### Eliminación del fichero de prueba
+Una vez terminada la comprobación, se elimina el fichero `info.php`.
+
+Esto es importante porque `phpinfo()` muestra información detallada sobre la configuración del servidor y no debe dejarse accesible innecesariamente.
+```bash
+sudo rm /var/www/html/info.php
+```
+
+#### Resultado
+La configuración final de PHP en el `linuxserver` queda establecida de la siguiente forma:
+```ini
+display_errors = Off
+log_errors = On
+error_log = /var/log/php_errors.log
+```
+
+El flujo de gestión de errores queda definido de la siguiente manera:
+```text
+              Petición HTTP
+                    │
+                    ▼
+                 Apache
+                    │
+                    ▼
+                   PHP
+                    │
+             ┌──────┴──────┐
+             │             │
+     display_errors     log_errors
+          Off               On
+             │               │
+             ▼               ▼
+      No mostrar error   /var/log/php_errors.log
+       al usuario
+```
+
+De esta manera, los errores generados por PHP no son visibles para los usuarios de la aplicación, pero quedan almacenados en un fichero de registro accesible para el administrador del servidor.
+
+La configuración permite además mantener un comportamiento equivalente al configurado en `windowsserver`, donde los errores se almacenan en `C:\Windows\Temp\php_errors.log`.
