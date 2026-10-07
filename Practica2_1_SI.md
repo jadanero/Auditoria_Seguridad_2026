@@ -206,5 +206,118 @@ En la máquina `linuxclient` deberemos descargar el `ldap`:
 sudo apt update
 sudo apt install sssd-ldap ldap-utils
 ```
+Se utiliza **SSSD (System Security Services Daemon)** como intermediario entre el sistema Linux y el servidor LDAP. De esta forma, las consultas de usuarios y grupos y la autenticación pueden realizarse contra el directorio centralizado.
 
+#### Configuración de SSSD
+
+Se configuró el archivo `/etc/sssd/sssd.conf` con la siguiente configuración:
+```
+[sssd]
+services = nss, pam
+domains = blue
+
+[domain/blue]
+id_provider = ldap
+auth_provider = ldap
+
+ldap_uri = ldap://192.168.57.10
+ldap_search_base = dc=blue,dc=local
+
+ldap_user_search_base = ou=People,dc=blue,dc=local
+ldap_user_object_class = posixAccount
+ldap_user_name = uid
+ldap_user_uid_number = uidNumber
+ldap_user_gid_number = gidNumber
+ldap_user_home_directory = homeDirectory
+ldap_user_shell = loginShell
+
+ldap_group_search_base = ou=Groups,dc=blue,dc=local
+ldap_group_object_class = posixGroup
+ldap_group_name = cn
+ldap_group_gid_number = gidNumber
+ldap_id_use_start_tls = false
+```
+
+La configuración define `LDAP` como proveedor tanto de identidad como de autenticación:
+```ini
+id_provider = ldap
+auth_provider = ldap
+```
+El servidor utilizado es:
+```ini
+ldap_uri = ldap://192.168.57.10
+```
+y la búsqueda se realiza dentro de:
+```text
+dc=blue,dc=local
+```
+Los usuarios se buscan en:
+```text
+ou=People,dc=blue,dc=local
+```
+mientras que los grupos se buscan en:
+```text
+ou=Groups,dc=blue,dc=local
+```
+Además, se estableció explícitamente:
+```ini
+ldap_id_use_start_tls = false
+```
+para evitar que SSSD intente establecer STARTTLS durante esta fase de la práctica. Esto es coherente con que la configuración de LDAPS/TLS se aborda posteriormente
+
+Posteriormente se reinició el servicio:
+```bash
+sudo systemctl restart sssd
+```
+y se comprobó su estado:
+```bash
+sudo systemctl status sssd --no-pager
+```
+El servicio quedó en estado:
+```text
+Active: active (running)
+```
+
+#### Eliminación del usuario local y autenticación centralizada
+El objetivo del apartado 2.5 es comprobar que `dummyadmin` ya no necesita existir como usuario local en `LinuxClient`, sino que puede ser identificado y autenticado mediante el servidor LDAP utilizando SSSD.
+Antes de realizar la prueba se comprobó la existencia del usuario local:
+```bash
+grep '^dummyadmin:' /etc/passwd
+```
+Una vez eliminado el usuario local:
+```bash
+sudo userdel -r dummyadmin
+```
+SSSD debe obtener la información de `dummyadmin` directamente desde LDAP.
+Para comprobarlo:
+```bash
+getent passwd dummyadmin
+```
+
+#### Resultado de la configuración
+Al finalizar estos apartados se dispone de una arquitectura en la que:
+```text
+                    ┌──────────────────────┐
+                    │     LinuxBackup      │
+                    │                      │
+                    │      OpenLDAP        │
+                    │   192.168.57.10      │
+                    │                      │
+                    │ dc=blue,dc=local     │
+                    │ ├── People           │
+                    │ │   └── dummyadmin   │
+                    │ └── Groups           │
+                    └──────────┬───────────┘
+                               │
+                               │ LDAP
+                               │
+                    ┌──────────▼───────────┐
+                    │     LinuxClient      │
+                    │                      │
+                    │        SSSD          │
+                    │     NSS + PAM        │
+                    └──────────────────────┘
+```
+
+De esta forma, los datos de los usuarios se mantienen centralizados en `LinuxBackup`, mientras que `LinuxClient` utiliza SSSD para consultar y autenticar dichos usuarios contra OpenLDAP.
 
