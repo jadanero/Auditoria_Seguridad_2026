@@ -184,7 +184,6 @@ homeDirectory: /home/dummyadmin
 loginShell: /bin/bash
 userPassword: {SSHA}HASH_COMPLETO
 ```
-
 Teniendo esto podemos añadir el usuario a la estructura:
 ```bash
 ldapadd -x -D "cn=admin,dc=blue,dc=local" -W -f dummyadmin.ldif
@@ -200,6 +199,18 @@ uid=dummyadmin,ou=People,dc=blue,dc=local
 ```
 Por tanto, el usuario ha quedado almacenado correctamente en el directorio LDAP.
 
+Creamos tambien el grupo al que va a pertenecer el usuario `dummyadmin` en el archivo `dummyadmin_group.ldif`:
+```
+dn: cn=dummyadmin,ou=Groups,dc=blue,dc=local
+objectClass: posixGroup
+cn: dummyadmin
+gidNumber: 10001
+```
+nos responde:
+```
+adding new entry "cn=dummyadmin,ou=Groups,dc=blue,dc=local"
+```
+
 ## Configuración de un cliente `OpenLDAP` en `LinuxClient`
 En la máquina `linuxclient` deberemos descargar el `ldap`:
 ```bash
@@ -209,7 +220,6 @@ sudo apt install sssd-ldap ldap-utils
 Se utiliza **SSSD (System Security Services Daemon)** como intermediario entre el sistema Linux y el servidor LDAP. De esta forma, las consultas de usuarios y grupos y la autenticación pueden realizarse contra el directorio centralizado.
 
 #### Configuración de SSSD
-
 Se configuró el archivo `/etc/sssd/sssd.conf` con la siguiente configuración:
 ```
 [sssd]
