@@ -316,7 +316,8 @@ Al finalizar estos apartados se dispone de una arquitectura en la que:
                     │ dc=blue,dc=local     │
                     │ ├── People           │
                     │ │   └── dummyadmin   │
-                    │ └── Groups           │
+                    │ └── Groups 
+                    │     └── dummyadmin
                     └──────────┬───────────┘
                                │
                                │ LDAP
@@ -329,5 +330,5 @@ Al finalizar estos apartados se dispone de una arquitectura en la que:
                     └──────────────────────┘
 ```
 
-De esta forma, los datos de los usuarios se mantienen centralizados en `LinuxBackup`, mientras que `LinuxClient` utiliza SSSD para consultar y autenticar dichos usuarios contra OpenLDAP.
+De esta forma, los datos de los usuarios se mantienen centralizados en `LinuxBackup`, mientras que `LinuxClient` utiliza SSSD para consultar y autenticar dichos usuarios contra `OpenLDAP`.
 
