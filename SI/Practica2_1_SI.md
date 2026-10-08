@@ -336,3 +336,34 @@ No se porqué el usuario existe pero me pide comunicación por TLS cosa que no m
 Terminamos esta parte con el servicio correcto pero mal la configuración.
 
 ## Configuración de LDAPS
+#### `linuxbackup`
+###### Crear la configuración del certificado
+Crearemos en el directorio para los certificados en `linuxbackup`:
+```bash
+sudo mkdir -p /etc/ldap/certs
+sudo nano ../../etc/ldap/certs/schema.conf 
+```
+donde la configuración del `schema.conf` será:
+```conf
+[req]
+distinguished_name = dn
+req_extensions = ext
+prompt = no
+
+[dn]
+CN = linuxbackup.blue.local
+
+[ext]
+subjectAltName = DNS:linuxbackup.blue.local
+```
+
+###### Crear la Autoridad de Certificación
+Para eso iremos a la carpeta de los certificados y generaremos la clave privada de la CA:
+```bash
+cd ../../etc/ldap/certs
+sudo openssl genrsa -out archivoCA.key 2048
+```
+Generamos el certificado de la CA:
+```bash
+sudo openssl req -x509 -new -key archivoCA.key -sha256 -days 36500 -out archivoCA.crt -subj "/CN=blue.local CA"
+```
