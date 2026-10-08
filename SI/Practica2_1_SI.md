@@ -303,7 +303,6 @@ Para comprobarlo:
 ```bash
 getent passwd dummyadmin
 ```
-
 #### Resultado de la configuración
 Al finalizar estos apartados se dispone de una arquitectura en la que:
 ```text
@@ -332,3 +331,8 @@ Al finalizar estos apartados se dispone de una arquitectura en la que:
 
 De esta forma, los datos de los usuarios se mantienen centralizados en `LinuxBackup`, mientras que `LinuxClient` utiliza SSSD para consultar y autenticar dichos usuarios contra `OpenLDAP`.
 
+No se porqué el usuario existe pero me pide comunicación por TLS cosa que no me permite seguir. El profesor me dice que continue configurando los certificados CA y después que vuelva a probar.
+
+Terminamos esta parte con el servicio correcto pero mal la configuración.
+
+## Configuración de LDAPS
