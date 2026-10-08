@@ -78,24 +78,24 @@ flowchart RL
 - [x] Deberá instalarse **PowerShell** en el sistema.
 - [x] `ClamAV` para analizar archivos y generar registros
 - [x] `ssh` desde la maquina `si`
-- [ ] guardar backups automáticos diarios con `cron` en el samba de `linuxbackup`
+- [x] guardar backups automáticos diarios con `cron` en el samba de `linuxbackup`
 - [x] Actualizaciones manuales
-- [ ] `Samba` para compartir archivos
+- [x] `Samba` para compartir archivos
 
 #### `windowsserver`
 - [x] `ssh` desde la maquina `si` con `Openssh`
 - [x]  El usuario `dummyadmin` deberá pertenecer al grupo Administradores. 
 - [x] Deberá habilitarse la administración remota `winrm`.
 - [x] Activado el usuario `Administrador`
-- [ ] `ClamAV` para analizar archivos y generar registros
+- [x] `ClamAV` para analizar archivos y generar registros
 - [x] `NXLog Community Edition`
-- [ ] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
+- [x] Gestionar las actualizaciones desde una terminal y que se pueda hacer por `ssh`
 - [x] Actualizaciones manuales
-- [ ] El servicio `IIS`
-- [ ] El servicio `Web-CGI`
-- [ ] Instalación y configuración de PHP
-- [ ] Resolución de errores 500
-- [ ] Publicación de la página web
+- [x] El servicio `IIS`
+- [x] El servicio `Web-CGI`
+- [x] Instalación y configuración de PHP
+- [x] Resolución de errores 500
+- [x] Publicación de la página web
 
 #### `windowsclient1`
 - [x] `ssh` desde la maquina `si` con `Openssh`
@@ -111,7 +111,7 @@ flowchart RL
 - [x] `NFS` para compartir directorios en red. 
 - [x] Actualizaciones manuales
 - [x] Crear 3 usuarios `alice` `bob` y `trudy`
-- [ ] `Samba` para guardar los backups de `linuxserver`
+- [x] `Samba` para guardar los backups de `linuxserver`
 
 #### `linuxclient`
 - [x] `ssh` desde la maquina `si`
