@@ -582,9 +582,71 @@ sudo journalctl -u sssd --no-pager -n 30
 ```
 Para hacer la comprobación del usuario usando `LDAPS`accedemos por `ssh` que es lo que nos estuvo fallando el día de la práctica. FUNCIONA
 
-#### Resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
-En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob`
+## Creación de un schema propio para almacenar claves SSH
+El objetivo de este apartado es ampliar el esquema de OpenLDAP para permitir almacenar las claves públicas SSH de los usuarios directamente en el directorio LDAP. De esta manera, SSSD podrá consultar las claves públicas y utilizarlas posteriormente para la autenticación SSH.
 
+En este apartado se utilizará exclusivamente el usuario `dummyadmin` para realizar las pruebas, sin modificar las entradas de otros usuarios.
+#### Creación del esquema personalizado
+El esquema se crea en el servidor `LinuxBackup`, dentro de la configuración dinámica de `OpenLDAP`:
+```
+cn=schema,cn=config
+```
+El DN previsto para el nuevo esquema es:
+```
+cn=blueSSH,cn=schema,cn=config
+```
+Antes de crearlo, se comprueba qué esquemas están cargados:
+```bash
+sudo ldapsearch -Y EXTERNAL -H ldapi:/// \
+  -b "cn=schema,cn=config" \
+  -LLL dn cn
+```
+La consulta devuelve los esquemas `core`, `cosine`, `nis` e `inetorgperson`. No existe previamente un esquema denominado `blueSSH`.
+#### Definición del esquema
+Se crea el archivo `blueSSH.ldif`:
+```bash
+sudo nano blueSSH.ldif
+```
+El archivo contiene la definición del atributo para almacenar la clave pública y una clase auxiliar que permite utilizar dicho atributo en las entradas de usuario:
+```
+dn: cn=blueSSH,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: blueSSH
+olcAttributeTypes: ( 1.3.6.1.4.1.42.1.1 NAME 'ssh-authorized-key' DESC 'SSH public key' EQUALITY octetStringMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
+olcObjectClasses: ( 1.3.6.1.4.1.42.1.2 NAME 'blueSSHAccount' DESC 'Auxiliary class for SSH public keys' SUP top AUXILIARY MAY ssh-authorized-key )
+```
+Los elementos principales son:
+- `ssh-authorized-key`: atributo destinado a almacenar la clave pública SSH.
+- `blueSSHAccount`: clase auxiliar que permite incorporar el atributo a una entrada LDAP de usuario.
+- `1.3.6.1.4.1.42.1`: OID base utilizado para las definiciones del esquema.
+- `1.3.6.1.4.1.1466.115.121.1.40`: sintaxis LDAP utilizada para almacenar una secuencia de octetos.
+
+**Nota:** el enunciado original utiliza el nombre `ssh_authorized_key`, pero `OpenLDAP` rechaza esa definición porque el guion bajo no es válido en un nombre de atributo LDAP. Por ello, se ha utilizado `ssh-authorized-key`.
+### Carga del esquema
+El esquema se carga mediante la interfaz local de administración de `OpenLDAP`, utilizando SASL/EXTERNAL:
+```bash
+sudo ldapadd -Y EXTERNAL -H ldapi:/// -f blueSSH.ldif
+```
+La carga debe finalizar correctamente antes de continuar con la modificación de las entradas de usuario.
+Para comprobar que el esquema está disponible:
+```bash
+sudo ldapsearch -Y EXTERNAL -H ldapi:/// -b "cn=schema,cn=config" -LLL '(cn=blueSSH)' dn cn
+```
+#### Usuario al que se asociará la clave
+La configuración se realizará únicamente para el usuario `dummyadmin`, cuya entrada se encuentra en:
+```
+uid=dummyadmin,ou=People,dc=blue,dc=local
+```
+La clave pública se almacenará como atributo de esa entrada LDAP. No se guardará la clave privada en el directorio.
+
+La clave privada permanecerá en `LinuxClient`, mientras que la clave pública se incorporará a LDAP para que SSSD pueda recuperarla cuando se configure la autenticación SSH.
+
+
+
+
+## Configuración en el resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
+En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob`
+FALTAN COSAS
 Instalaremos:
 ```bash
 sudo apt install sssd-ldap ldap-utils
