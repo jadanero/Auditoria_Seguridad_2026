@@ -367,3 +367,158 @@ Generamos el certificado de la CA:
 ```bash
 sudo openssl req -x509 -new -key archivoCA.key -sha256 -days 36500 -out archivoCA.crt -subj "/CN=blue.local CA"
 ```
+
+###### Generar la clave privada del servidor LDAP
+Ahora generamos la clave privada que utilizará **LinuxBackup** para LDAPS:
+```bash
+sudo openssl genrsa -out archivo.key 2048
+```
+Comprobamos que existe:
+```bash
+sudo ls -l archivo.key
+```
+La clave debe permanecer protegida. Podemos dejarla accesible únicamente para root:
+```bash
+sudo chmod 600 archivo.key
+```
+
+###### Generar la CSR
+Generamos la solicitud de certificado:
+```bash
+sudo openssl req -new -key archivo.key -out archivo.csr -config schema.conf
+```
+Podemos comprobar la CSR:
+```bash
+sudo openssl req -in archivo.csr -noout -subject
+```
+Debería aparecer:
+```
+subject=CN = linuxbackup.blue.local
+```
+Y es importante comprobar el SAN:
+```bash
+sudo openssl req -in archivo.csr -noout -text | grep -A1 "Subject Alternative Name"
+```
+Debería aparecer:
+```
+X509v3 Subject Alternative Name:
+    DNS:linuxbackup.blue.local
+```
+
+###### Firmar el certificado
+Ahora utilizamos la CA que acabamos de crear para firmar la CSR:
+
+```bash
+sudo openssl x509 -req -in archivo.csr -CA archivoCA.crt -CAkey archivoCA.key -CAcreateserial -out archivo.crt -days 36500 -sha256 -extensions ext -extfile schema.conf
+```
+Comprobamos el certificado:
+```bash
+sudo openssl x509 -in archivo.crt -noout -subject -issuer
+```
+Deberíamos obtener:
+```
+subject=CN = linuxbackup.blue.local
+issuer=CN = blue.local CA
+```
+Y comprobamos el SAN:
+```bash
+sudo openssl x509 -in archivo.crt -noout -text | grep -A1 "Subject Alternative Name"
+```
+Debe aparecer:
+```
+DNS:linuxbackup.blue.local
+```
+Finalmente podemos verificar que la CA ha firmado correctamente el certificado:
+```bash
+sudo openssl verify -CAfile archivoCA.crt archivo.crt
+```
+Resultado esperado:
+```
+archivo.crt: OK
+```
+
+###### Resultado hasta aquí
+En `LinuxBackup` deberíamos tener:
+```ls
+/etc/ldap/certs/
+├── archivoCA.key       ← clave privada de la CA
+├── archivoCA.crt       ← certificado de la CA
+├── archivo.key         ← clave privada de LinuxBackup
+├── archivo.csr         ← solicitud de certificado
+├── archivo.crt         ← certificado de LinuxBackup
+├── archivoCA.srl       ← generado al firmar
+└── schema.conf
+```
+
+###### Ajustamos los permisos
+En `LinuxBackup`, ejecuta:
+```bash
+sudo chown root:openldap /etc/ldap/certs/archivo.key
+sudo chmod 640 /etc/ldap/certs/archivo.key
+
+sudo chown root:root /etc/ldap/certs/archivo.crt
+sudo chmod 644 /etc/ldap/certs/archivo.crt
+
+sudo chown root:root /etc/ldap/certs/archivoCA.crt
+sudo chmod 644 /etc/ldap/certs/archivoCA.crt
+```
+La clave privada debe poder leerla el proceso de `OpenLDAP`, pero no los usuarios normales. El certificado público puede ser legible.
+
+###### Reconfigurar `OpenLDAP`
+Vamos a modificar la configuración dinámica de `OpenLDAP` mediante `cn=config`.
+Crea el archivo:
+```bash
+sudo nano /etc/ldap/certs/tls.ldif
+```
+Introduce:
+```
+dn: cn=config
+changetype: modify
+replace: olcTLSCACertificateFile
+olcTLSCACertificateFile: /etc/ldap/certs/archivoCA.crt
+-
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/ldap/certs/archivo.crt
+-
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/ldap/certs/archivo.key
+```
+Aplica los cambios localmente usando la autenticación EXTERNAL por el socket LDAP:
+```bash
+sudo ldapmodify -Y EXTERNAL -H ldapi:/// -f /etc/ldap/certs/tls.ldif
+```
+Deberías obtener varias respuestas `modifying entry "cn=config"` o una confirmación equivalente.
+###### Activar el listener LDAPS
+Comprueba cómo está arrancando actualmente `slapd`:
+```bash
+sudo systemctl cat slapd
+```
+Los listeners suelen configurarse en:
+```
+sudo nano /etc/default/slapd
+```
+Busca la variable `SLAPD_SERVICES`. Debe incluir tanto LDAP local como LDAPS. Por ejemplo:
+```
+SLAPD_SERVICES="ldap:/// ldapi:/// ldaps:///"
+```
+Después reiniciamos:
+```
+sudo systemctl restart slapd
+sudo systemctl status slapd --no-pager
+```
+###### Verificar LDAPS en `LinuxBackup`
+Ejecuta:
+```
+openssl s_client \
+  -connect 127.0.0.1:636 \
+  -servername linuxbackup.blue.local \
+  -CAfile /etc/ldap/certs/archivoCA.crt \
+  -verify_hostname linuxbackup.blue.local
+```
+Al final de la salida, buscamos:
+```
+Verify return code: 0 (ok)
+```
+
+#### `linuxclient`
+
