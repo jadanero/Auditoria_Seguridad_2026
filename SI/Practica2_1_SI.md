@@ -679,8 +679,20 @@ sudo ldapsearch -x \
 ```
 Si todo funciona, veremos la clave pública almacenada como atributo LDAP. FUNCIONA.
 
+Modificamos en `linuxclient` de donde se obtiene la configuración de `ssh`
+Elimino esta línea:
 
+```
+Include /usr/....
+```
 
+En su lugar, añade al final del archivo estas directivas:
+
+```
+PubkeyAuthentication yes
+AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
+AuthorizedKeysCommandUser nobody
+```
 ## Configuración en el resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
 En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob`
 FALTAN COSAS
