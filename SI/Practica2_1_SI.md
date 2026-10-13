@@ -641,6 +641,43 @@ La clave pública se almacenará como atributo de esa entrada LDAP. No se guarda
 
 La clave privada permanecerá en `LinuxClient`, mientras que la clave pública se incorporará a LDAP para que SSSD pueda recuperarla cuando se configure la autenticación SSH.
 
+#### En `LinuxClient`, generamos el par de claves y mostramos la pública:
+```bash
+ssh-keygen -t ed25519 -f ~/.ssh/dummyadmin_ed25519
+cat ~/.ssh/dummyadmin_ed25519.pub
+```
+
+#### En `LinuxBackup`, crea el archivo `dummyadmin_ssh.ldif`:
+
+```bash
+nano dummyadmin_ssh.ldif
+```
+
+Introducimos lo siguiente:
+```
+dn: uid=dummyadmin,ou=People,dc=blue,dc=local
+changetype: modify
+add: objectClass
+objectClass: blueSSHAccount
+-
+add: ssh-authorized-key
+ssh-authorized-key: CLAVE SSH + COMENTARIO
+```
+#### Aplica la modificación en `LinuxBackup`:
+```bash
+sudo ldapmodify -x \
+  -D "cn=admin,dc=blue,dc=local" -W \
+  -f dummyadmin_ssh.ldif
+```
+
+#### Comprueba que se ha guardado en LDAP:
+```
+sudo ldapsearch -x \
+  -D "cn=admin,dc=blue,dc=local" -W \
+  -b "uid=dummyadmin,ou=People,dc=blue,dc=local" \
+  -LLL ssh-authorized-key
+```
+Si todo funciona, veremos la clave pública almacenada como atributo LDAP. FUNCIONA.
 
 
 
