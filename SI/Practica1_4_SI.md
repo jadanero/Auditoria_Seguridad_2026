@@ -794,3 +794,5 @@ Esto confirmó que cron ejecuta el script y guarda sus resultados.
 El análisis es periódico, no una protección en tiempo real: un archivo malicioso podría permanecer en la web hasta el siguiente escaneo. LinuxServer debe estar encendido a la hora programada; cron no recupera automáticamente las ejecuciones perdidas mientras está apagado.
 
 La ausencia de detecciones significa que ClamAV no encontró amenazas reconocidas durante ese análisis, pero no garantiza que la aplicación carezca de vulnerabilidades.
+
+dksbfksd
