@@ -296,7 +296,7 @@ grep '^dummyadmin:' /etc/passwd
 ```
 Una vez eliminado el usuario local:
 ```bash
-sudo userdel -r dummyadmin
+sudo userdel dummyadmin
 ```
 SSSD debe obtener la información de `dummyadmin` directamente desde LDAP.
 Para comprobarlo:
@@ -693,9 +693,12 @@ PubkeyAuthentication yes
 AuthorizedKeysCommand /usr/bin/sss_ssh_authorizedkeys
 AuthorizedKeysCommandUser nobody
 ```
+
 ## Configuración en el resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
-En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob`
-FALTAN COSAS
+En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob` con sus respectivos grupos. Al final `LDAP` quedará asi:
+```
+
+```
 Instalaremos:
 ```bash
 sudo apt install sssd-ldap ldap-utils
