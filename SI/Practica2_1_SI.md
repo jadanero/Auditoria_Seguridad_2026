@@ -521,4 +521,70 @@ Verify return code: 0 (ok)
 ```
 
 #### `linuxclient`
+###### Configurar `LinuxClient` para confiar en la CA
+Una vez que LDAPS funcione en `LinuxBackup`, copia solo el certificado público de la CA, nunca `archivoCA.key`, a `LinuxClient`.
+Desde `LinuxClient`, puedes copiarlo por SSH si tienes acceso:
+```bash
+sudo mkdir -p /etc/ldap/certs
+sudo scp dummyadmin@192.168.57.10:/etc/ldap/certs/archivoCA.crt /tmp/archivoCA.crt
+sudo cp /tmp/archivoCA.crt /etc/ldap/certs/archivoCA.crt
+sudo chmod 644 /etc/ldap/certs/archivoCA.crt
+```
+Prueba la conexión desde `LinuxClient`:
+```bash
+LDAPTLS_CACERT=/etc/ldap/certs/archivoCA.crt \
+ldapsearch -x \
+  -H ldaps://linuxbackup.blue.local \
+  -D "cn=admin,dc=blue,dc=local" \
+  -W \
+  -b "dc=blue,dc=local" \
+  -s base
+```
+Para que el nombre `linuxbackup.blue.local` resuelva correctamente, comprueba en `LinuxClient`:
+```bash
+getent hosts linuxbackup.blue.local
+```
+###### Cambiar SSSD a LDAPS
+Solo cuando la consulta anterior funcione, cambia en `/etc/sssd/sssd.conf` de `LinuxClient`:
+```
+[sssd]
+services = nss, pam
+domains = blue
+
+[domain/blue]
+id_provider = ldap
+auth_provider = ldap
+
+ldap_uri = ldaps://linuxbackup.blue.local
+ldap_search_base = dc=blue,dc=local
+
+ldap_user_search_base = ou=People,dc=blue,dc=local
+ldap_user_object_class = posixAccount
+ldap_user_name = uid
+ldap_user_uid_number = uidNumber
+ldap_user_gid_number = gidNumber
+ldap_user_home_directory = homeDirectory
+ldap_user_shell = loginShell
+
+ldap_group_search_base = ou=Groups,dc=blue,dc=local
+ldap_group_object_class = posixGroup
+ldap_group_name = cn
+ldap_group_gid_number = gidNumber
+
+ldap_tls_cacert = /etc/ldap/certs/archivoCA.crt
+ldap_tls_reqcert = demand
+```
+Mantén el resto de tu configuración de usuarios y grupos. Después:
+```
+sudo chmod 600 /etc/sssd/sssd.conf
+sudo systemctl restart sssd
+sudo journalctl -u sssd --no-pager -n 30
+```
+Para hacer la comprobación del usuario usando `LDAPS`accedemos por `ssh` que es lo que nos estuvo fallando el día de la práctica. FUNCIONA
+
+#### Resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
+Instalaremos:
+```bash
+sudo apt install sssd-ldap ldap-utils
+```
 
