@@ -583,6 +583,8 @@ sudo journalctl -u sssd --no-pager -n 30
 Para hacer la comprobación del usuario usando `LDAPS`accedemos por `ssh` que es lo que nos estuvo fallando el día de la práctica. FUNCIONA
 
 #### Resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
+En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob`
+
 Instalaremos:
 ```bash
 sudo apt install sssd-ldap ldap-utils
