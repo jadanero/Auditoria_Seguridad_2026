@@ -544,7 +544,7 @@ Para que el nombre `linuxbackup.blue.local` resuelva correctamente, comprueba en
 ```bash
 getent hosts linuxbackup.blue.local
 ```
-###### Cambiar SSSD a LDAPS
+###### Cambiar SSSD para usar LDAPS
 Solo cuando la consulta anterior funcione, cambia en `/etc/sssd/sssd.conf` de `LinuxClient`:
 ```
 [sssd]
@@ -808,4 +808,34 @@ Instalaremos en las maquinas `linux` restantes de la maqueta:
 ```bash
 sudo apt install sssd-ldap ldap-utils
 ```
+Configuraremos en la ruta `/etc/sssd/sssd.conf`:
+```
+[sssd]
+services = nss, pam
+domains = blue
+
+[domain/blue]
+id_provider = ldap
+auth_provider = ldap
+
+ldap_uri = ldaps://linuxbackup.blue.local
+ldap_search_base = dc=blue,dc=local
+
+ldap_user_search_base = ou=People,dc=blue,dc=local
+ldap_user_object_class = posixAccount
+ldap_user_name = uid
+ldap_user_uid_number = uidNumber
+ldap_user_gid_number = gidNumber
+ldap_user_home_directory = homeDirectory
+ldap_user_shell = loginShell
+
+ldap_group_search_base = ou=Groups,dc=blue,dc=local
+ldap_group_object_class = posixGroup
+ldap_group_name = cn
+ldap_group_gid_number = gidNumber
+
+ldap_tls_cacert = /etc/ldap/certs/archivoCA.crt
+ldap_tls_reqcert = demand
+```
+Y pediremos el certificado CA:
 
