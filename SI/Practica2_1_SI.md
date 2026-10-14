@@ -697,16 +697,114 @@ AuthorizedKeysCommandUser nobody
 ## Configuración en el resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
 En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob` con sus respectivos grupos. Al final `LDAP` quedará asi:
 ```bash
-ldapsearch -x -H ldaps://linuxbackup.blue.local \
-  -D "cn=admin,dc=blue,dc=local" -W \
+ldapsearch -x -D "cn=admin,dc=blue,dc=local" -W \
   -b "dc=blue,dc=local" \
   "(|(objectClass=posixAccount)(objectClass=posixGroup))"
 ```
 La respuesta:
 ```
+# extended LDIF
+#
+# LDAPv3
+# base <dc=blue,dc=local> with scope subtree
+# filter: (|(objectClass=posixAccount)(objectClass=posixGroup))
+# requesting: ALL
+#
 
+# dummyadmin, People, blue.local
+dn: uid=dummyadmin,ou=People,dc=blue,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: blueSSHAccount
+uid: dummyadmin
+cn: dummyadmin
+sn: dummyadmin
+givenName: dummyadmin
+displayName: dummyadmin
+uidNumber: 10001
+gidNumber: 10001
+homeDirectory: /home/dummyadmin
+loginShell: /bin/bash
+userPassword:: e1NTSEF9cmMxcjlEUnMvQzN5andGb2s0U2YvYVAzYktaOWd3b2s=
+ssh-authorized-key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICErU2w4wkvRo7fHBsHGgG
+ anvwc3pj2PEsaGeVtMXHl7 dummyadmin@linuxclient
+
+# dummyadmin, Groups, blue.local
+dn: cn=dummyadmin,ou=Groups,dc=blue,dc=local
+objectClass: posixGroup
+cn: dummyadmin
+gidNumber: 10001
+
+# alice, Groups, blue.local
+dn: cn=alice,ou=Groups,dc=blue,dc=local
+objectClass: posixGroup
+cn: alice
+gidNumber: 10002
+
+# alice, People, blue.local
+dn: uid=alice,ou=People,dc=blue,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: alice
+cn: alice
+sn: alice
+givenName: alice
+displayName: alice
+uidNumber: 10002
+gidNumber: 10002
+homeDirectory: /home/alice
+loginShell: /bin/bash
+userPassword:: e1NTSEF9NDM3eGtRZC9kNzY4MTF3aHJlNDdEb2QzeXZDS1ZDb2o=
+
+# bob, People, blue.local
+dn: uid=bob,ou=People,dc=blue,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: bob
+cn: bob
+sn: bob
+givenName: bob
+displayName: bob
+uidNumber: 10003
+gidNumber: 10003
+homeDirectory: /home/bob
+loginShell: /bin/bash
+userPassword:: e1NTSEF9aHVBSlY2Q0p4bVZZdk1pZkFibkZibzlWRXBxVG5BaVk=
+
+# trudy, People, blue.local
+dn: uid=trudy,ou=People,dc=blue,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: trudy
+cn: trudy
+sn: trudy
+givenName: trudy
+displayName: trudy
+uidNumber: 10004
+gidNumber: 10004
+homeDirectory: /home/trudy
+loginShell: /bin/bash
+userPassword:: e1NTSEF9N09PcERrQkg3dDdNaWZVdzNtS1VlMEl4WHovLzlYK2E=
+
+# bob, Groups, blue.local
+dn: cn=bob,ou=Groups,dc=blue,dc=local
+objectClass: posixGroup
+cn: bob
+gidNumber: 10003
+
+# trudy, Groups, blue.local
+dn: cn=trudy,ou=Groups,dc=blue,dc=local
+objectClass: posixGroup
+cn: trudy
+gidNumber: 10004
 ```
-Instalaremos:
+Esto nos indica que todos los usuarios están creados. Que solo tiene una contraseña ssh el usuario `dummyadmin` en la máquina `linuxclient`
+
+Instalaremos en las maquinas `linux` restantes de la maqueta:
 ```bash
 sudo apt install sssd-ldap ldap-utils
 ```
