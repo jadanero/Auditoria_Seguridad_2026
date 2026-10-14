@@ -671,7 +671,7 @@ sudo ldapmodify -x \
 ```
 
 #### Comprueba que se ha guardado en LDAP:
-```
+```bash
 sudo ldapsearch -x \
   -D "cn=admin,dc=blue,dc=local" -W \
   -b "uid=dummyadmin,ou=People,dc=blue,dc=local" \
@@ -696,6 +696,13 @@ AuthorizedKeysCommandUser nobody
 
 ## Configuración en el resto de dispositivos: `linuxrouter1` `linuxrouter2` `linuxserver`
 En `linuxbackup` crearemos los usuarios y grupos: `alice` `trudy` `bob` con sus respectivos grupos. Al final `LDAP` quedará asi:
+```bash
+ldapsearch -x -H ldaps://linuxbackup.blue.local \
+  -D "cn=admin,dc=blue,dc=local" -W \
+  -b "dc=blue,dc=local" \
+  "(|(objectClass=posixAccount)(objectClass=posixGroup))"
+```
+La respuesta:
 ```
 
 ```
