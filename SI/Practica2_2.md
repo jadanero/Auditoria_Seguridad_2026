@@ -369,27 +369,14 @@ El DNS integrado resolverá los nombres del dominio y utilizará el reenviador p
   
 
 Los siguientes pasos, que aún no se han ejecutado, serán confirmar el resultado del aprovisionamiento, utilizar el archivo de Kerberos generado por Samba, habilitar el controlador de dominio y volver a configurar el DNS del servidor con su propia IP. Después comprobaremos los registros DNS de LDAP y Kerberos, la obtención de un ticket y la creación del usuario de dominio `dummyadmin3`.
-
-  
-
 ## 5. Archivos modificados o conservados
 
-  
-
-| Archivo | Cambio |
-
-|---|---|
-
-| `/etc/resolv.conf` | DNS temporal `8.8.8.8` |
-
-| `/etc/krb5.conf` | Corrección del nombre en `admin_server` |
-
-| `/etc/hosts` | Retirada de entradas de otros equipos |
-
-| `/etc/hosts.pre-samba-ad` | Copia del archivo hosts anterior |
-
+| Archivo                      | Cambio                                     |
+| ---------------------------- | ------------------------------------------ |
+| `/etc/resolv.conf`           | DNS temporal `8.8.8.8`                     |
+| `/etc/krb5.conf`             | Corrección del nombre en `admin_server`    |
+| `/etc/hosts`                 | Retirada de entradas de otros equipos      |
+| `/etc/hosts.pre-samba-ad`    | Copia del archivo hosts anterior           |
 | `/etc/samba/smb.conf.pre-ad` | Configuración anterior de Samba conservada |
-
-  
 
 Esta memoria recoge lo realizado y confirmado durante la sesión. No incluye todavía las pruebas finales del dominio ni la configuración de clientes.
