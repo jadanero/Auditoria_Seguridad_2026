@@ -837,5 +837,34 @@ ldap_group_gid_number = gidNumber
 ldap_tls_cacert = /etc/ldap/certs/archivoCA.crt
 ldap_tls_reqcert = demand
 ```
-Y pediremos el certificado CA:
+Y pediremos el certificado CA copiandolo por SSH:
+```bash
+sudo mkdir -p /etc/ldap/certs
+sudo scp dummyadmin@192.168.57.10:/etc/ldap/certs/archivoCA.crt /tmp/archivoCA.crt
+sudo cp /tmp/archivoCA.crt /etc/ldap/certs/archivoCA.crt
+sudo chmod 644 /etc/ldap/certs/archivoCA.crt
+```
+Para que el nombre `linuxbackup.blue.local` resuelva correctamente:
+```bash
+getent hosts linuxbackup.blue.local
+```
+Prueba la conexión desde las máquinas:
+```bash
+LDAPTLS_CACERT=/etc/ldap/certs/archivoCA.crt \
+ldapsearch -x \
+  -H ldaps://linuxbackup.blue.local \
+  -D "cn=admin,dc=blue,dc=local" \
+  -W \
+  -b "dc=blue,dc=local" \
+  -s base
+```
+Con este comando sabremos que usuarios están creados en las maquinas:
+```bash
+awk -F: '$3 >= 1000 && $3 < 65534 {print $1, "UID=" $3, "HOME=" $6}' /etc/passwd
+```
+Y accedemos por ssh con  un usuario distinto a `dummyadmin` para poder eliminar el usuario:
+```bash
+sudo userdel dummyadmin
+```
+
 
