@@ -3,7 +3,7 @@
 
 **Conexión rápida ssh maquina:**
 ```
-ssh 10.6.25.102
+ssh kali@10.6.25.102
 ```
 `usuario`: <span class="spoiler">kali</span>
 `contraseña`: <span class="spoiler">muniain</span>
