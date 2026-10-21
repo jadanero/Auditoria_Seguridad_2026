@@ -18,7 +18,7 @@ Ahora vamos a familiarizarnos con las herramientas típicas de descubrimiento ac
 ## C2
 Hemos hecho en el bridge que ha creado el docker un `arp-scan`
 ```
-sudo arp-scan -I <Interfaz_docker> --localhost
+sudo arp-scan -I <Interfaz_docker> --localnet
 ```
 con esto hemos obtenido la `ip_target`
 
