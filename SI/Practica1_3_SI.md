@@ -81,6 +81,11 @@ iface enp0s8 inet static 
 	address 192.168.56.254
 	netmask 255.255.255.0
 ```
+
+```
+systemctl restart networking
+```
+
 Habilitar `port-forwarding` para el reenvio de paquetes
 ```bash
 sudo sysctl -w net.ipv4.ip_forward=1
