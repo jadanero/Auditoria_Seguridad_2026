@@ -106,7 +106,7 @@ sudo apt update && sudo apt install iptables iptables-persistent -y
 ```
 
 ```bash
-iptables -t nat -A <POSTROUTING> -o enp0s3 -j <MASQUERADE>
+iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
 ```
 
 Por ultimo tenemos que guardar la regla para que quede persistente si rebooteamos
