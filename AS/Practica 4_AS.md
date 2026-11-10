@@ -12,6 +12,9 @@ sudo nmap -sS -p- -n -Pn --min-rate <N> <TARGET_IP>
 Ahora haremos un scaneo de los servicios que están corriendo:
 ```
 sudo nmap -sCV -p22,110,139,143,445,993,995,4443,8080,10021 <TARGET_IP>
+```
+
+```
 AS{apachessl_NMAPCHECK}
 ```
 Encontramos una #flag 
