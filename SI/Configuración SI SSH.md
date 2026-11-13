@@ -9,50 +9,10 @@ palangana2026.ABC
 
 `/.ssh/config`
 ```
-Host linuxbackup
-    HostName 192.168.57.10
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_linux
-
-Host linuxserver
-    HostName 192.168.56.10
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_linux
-
-Host linuxclient
-    HostName 192.168.56.101
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_linux
-    
-Host windowsserver
-    HostName 192.168.57.11
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_windows
-    
-Host windowsserver-admin
-    HostName 192.168.57.11
-    User administrador
-    IdentityFile ~/.ssh/rsa_windows
-    
-Host windowsclient
-    HostName 192.168.56.102
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_windows
-    
-Host windowsclient-admin
-    HostName 192.168.56.102
-    User administrador
-    IdentityFile ~/.ssh/rsa_windows
-    
 Host router1
     HostName 192.168.56.254
     User dummyadmin
-    IdentityFile ~/.ssh/rsa_router
-    
-Host router2
-    HostName 192.168.56.253
-    User dummyadmin
-    IdentityFile ~/.ssh/rsa_router
+    IdentityFile ~/.ssh/rsa_ssh
 ```
 Y finalmente le daremos permisos para que funcione bien.
 ```
